@@ -89,7 +89,7 @@ The core design idea of flowschars were inspired from Acrross Prime Blogpost. Wi
 
 ### Multichain (AnySwap)
 
-![This is an image](/img/interop/Multichain.jpg)
+![Multichain protocol overview](/img/interop/multichain.jpg)
 
 Participants – User, network of SMPC nodes that control the Decentralized Management Account (vault)
 User flow - User deposits the native asset into the SMPC vault on the origin chain → SMPC nodes detect the event and mint 1 : 1 wrapped tokens to the user on the destination chain (or burn/mint in reverse). When the user later sends wrapped tokens back, the contract burns them and SMPC nodes release the originals from the vault.
@@ -99,6 +99,8 @@ On the paper Multichain was fairly decentralized, even more decentralized that a
 
 ### Wormhole
 
+![Wormhole protocol overview](/img/interop/wormhole.jpg)
+
 Participants – User, Guardian Network - independent validator nodes that sign messages (VAAs*), Relayer carry a VAA to target chain.
 User flow – User emits a message (or token deposit) via the core contract on the source chain → Guardians observe and produce a VAA → Relayer submits the VAA to the destination contract, which verifies signatures and mints/unlocks the asset or executes the payload for the user.
 Security – Message executes only if the destination contract sees a valid threshold Guardian multisig; an attacker must corrupt strong majority Guardians. 
@@ -106,7 +108,6 @@ Extendability – To support a new chain, deploy the core contracts and have Gua
 *Verified Action Approvals (VAAs) are Wormhole's core messaging primitive. They are packets of cross-chain data emitted whenever a cross-chain application contract interacts with the Core Contract.
 
 Axelar NetworkAxelar Network Overview
-
 
 Participants – User, proof-of-stake validators that run the Cosmos-based Axelar network
 User flow – User calls the Gateway on the source chain (token transfer or General-Message-Passing call) → Validators observe the event, reach BFT consensus and co-sign an approval → an executor submits the approval to the Gateway on the destination chain → Gateway mints/unlocks tokens or executes the target contract, delivering assets/data to the user.
@@ -247,8 +248,11 @@ The Open Intents Framework is a modular, open-source framework for building and 
 This is an initiative coming from a motivatiation and premis to modualizrie intent protocol componetns. Like messaging, running Solver and etc. I actually respect this initative, but Stundartigizing Solver looks like a non-standartzible thing. Solvers are fundamentally different, they have bunch of integrations with CEXes, other bridges, swap protocols, they have bunch of admin panels, tools for monitoring and etc, becasue of unstable cross-chain infrasturcture including RPC outages, architectural differences beetwin blockchains and etc, they have sophisticated transaction processing systems. All of this way complicated, way custom, that this is really hard to standartize. The solver that uses an atomic swap protocol, works different that one uses x-chain messaging, and that one is different from Solvers like in deBridge protocol. There are too many differences to get an usefull standard. Existing solvers will need some kind of incentive to move to this standard, this standard should generate a bigger orderflow somehow (lets say if this got implemented with wallets), or the standart should solve a good problem for them. I don't see either of these happing soon.
 Across Prime
 
-Li.Fi x Catalyst
+### Li.Fi x Catalyst
+
 Li.Fi acquiring Catalyst - basically as far as I can tell asquhiring - is the most badass move I seen in this space. Why is that? So listen, the big portion of the cross-chain volume is already going through Jumper. They managed to both attract users as well as wallets (in startup terms B2C and B2B). Now they have the biggest order-flow for cross-chain in single place. And what is the next trhing to do? They route all this orderflow to different solvers and protocols and those capture the value from those transactions. Now Li.Fi wants to capture that value for themselves. If they add their own solver/protocol system, they can eventually route all the order flow to their solver and capture that value instead of leaving it underlying solver/protocols. Smartass, badass move. I am not sure how this will play out. I have few ideas that would want to share here for them, is that I think the aggregator type of integration for example in wallet, when the integrated bridges has a very wide range of security details, being from centralized to semi-decentralized or ones that fake decentralized, this should be probably an option for integrators (I dont know if they have or not have this feature) so they can select a security level. The other option that I would really like to see in Li.Fi which is super difficult to implement technically, to have a permissionless integraiton of the bridges. Additionally its very easy to 'trick' the aggregator, I can just add a centralized bridge to it and majority of alll the order flow will go trhough it, and users has no assurance from security persepective or any other information shown in UI, its only the fee and speed. Paying with VISA is faster than any blockchain, cheaper than any blockahin, why we are building crypto?
-TRAIN x Aztec
+
+### TRAIN x Aztec
+
 With public announcement of the first Privacy-preserving L2 Aztec, the cross-chain ecosystem becomes much more interesting. If you can build a cross-chain bridge - a private one, from any N chain to Aztec, and from Aztec to any M chain, it will mean that you can basically have a private cross-chain bridging from N to M chains. Pretty exciting. And the TRAIN's design perfectly fits this idea. Combaning the Atomic Swaps with Multi-hop Transaction, TRAIN can enable this seemslesly fomr a single UI/UX.
 Let's explore it a bit more. So TRAIN protocol allows two parties (user, solver) to trustless exchange assets in 2 chains. Also this can be chained together, to go to chains that do not have direct connection (e.g. single solver). TRAIN now is being built to support Aztec. To basically do a private cross-chain bridge to Aztec. So you can privately bridge to Aztec from Arbitrum, or from Solana. Thats already interesting, but if you have 2 solvers supporting Aztec, this can also allow you to do a cross-chain bridge from Arbitrum to Solana, in the middle using Aztec, so first solver will solve Arbitrum to Aztec, second solver will solve Aztec to Solana. There is a bit still technical challange because TRAIN for multihop transactions uses the same HASHLOCK so ARbitrum and Solana locks will share that and it will be easly linked and we are trying to solve it.
