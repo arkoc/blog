@@ -2,3 +2,7 @@ baseURL = 'https://botinsane.me'
 languageCode = 'en-us'
 title = 'bot_insane'
 theme = 'nostyleplease'
+
+[params]
+  [params.theme_config]
+    appearance        = "light"
