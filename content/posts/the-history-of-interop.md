@@ -63,7 +63,7 @@ The catalyst of the interop solutions was driver by design of Arbitrum and Optim
 
 ### What is the CORE Problem of Interop?
 
-As you can see from Bitcoin and Litecoin example as well ass Cosmos and Polkadot designs, the core driver for interop solutions is solving the scalability issue and the core problem with that solutions is, who verifies what. To just get to the bottom of interop its as simple as sending assets from one wallet to another wallet. But in different networks. So what is the question you ask about blockchain, when you are considering holding/buying/using their infra, what is the consensus of that that blockchain, how many validators, how many miners and etc. Once you are confident you use the wallet and you do the transfers. With cross-chain transfers, now you have 2 same questions. You are operating in 2 different security zones, for example for Bitcoin and Ethereum those zones are similar but for long-tail chain or app chain versus Bitcoin the security zones are different. So this is the thing you should consider. And in top of that you should ask the question, about actual transportation layer, what handles that cross-chain transfer, what is the consensus. Let's say for Bitcoin to Ethereum transfers, the security of that transfer should at least be in a same security level as Bitcoin and Ethereum transfers right? Apparently thats not true. And there is a lot there, it means that in order to do Bitcoin to Ethereum tranfer, you are passing through a 3rd zone, which has its own security attributes. Who are verifing the transactions, who are signign the transactions, what happens if.... Thats why its a way complicated topic, there are way too much solutions trying to solve this exact problem, what is the exact transportation mechanism? Who is goveringing this process? Because of the single chain we have the answers, we know miners, we know validators how they workd and etc, but the same question should be asked for an interop solution as they effectivly act cross-chain ledger kind of. Who is governing the cross-chain transaction process? The question that raised billions of dollars, and sparked dozens of solutions. This post will explore the majority of them and will try to answer the same exact question from different solutions perspective. Current interop protocol do more volume than some of the actual chains. Yet the security of these protocols are underexplored. Will explore the all details end to end now.
+As you can see from Bitcoin and Litecoin example as well ass Cosmos and Polkadot designs, the core driver for interop solutions is solving the scalability issue and the core problem with that solutions is, who verifies what. To just get to the bottom of interop its as simple as sending assets from one wallet to another wallet. But in different networks. So what is the question you ask about blockchain, when you are considering holding/buying/using their infra, what is the consensus of that that blockchain, how many validators, how many miners and etc. Once you are confident you use the wallet and you do the transfers. With cross-chain transfers, now you have 2 same questions. You are operating in 2 different security zones, for example for Bitcoin and Ethereum those zones are similar but for long-tail chain or app chain versus Bitcoin the security zones are different. So this is the thing you should consider. And in top of that you should ask the question, about actual transportation layer, what handles that cross-chain transfer, what is the consensus. Let's say for Bitcoin to Ethereum transfers, the security of that transfer should at least be in a same security level as Bitcoin and Ethereum transfers right? Apparently thats not true. And there is a lot there, it means that in order to do Bitcoin to Ethereum tranfer, you are passing through a 3rd zone, which has its own security attributes. Who are verifing the transactions, who are signign the transactions, what happens if.... Thats why its a way complicated topic, there are way too much solutions trying to solve this exact problem, what is the exact transportation mechanism? Who is goverining this process? Because of the single chain we have the answers, we know miners, we know validators how they workd and etc, but the same question should be asked for an interop solution as they effectivly act cross-chain ledger kind of. Who is governing the cross-chain transaction process? The question that raised billions of dollars, and sparked dozens of solutions. This post will explore the majority of them and will try to answer the same exact question from different solutions perspective. Current interop protocol do more volume than some of the actual chains. Yet the security of these protocols are underexplored. Will explore the all details end to end now.
 
 We will start exploring each solutions I recall in short time scale which project was announced first, but at that time emerged multiple solution and you could put them in to 2 categories, ones that were trying to solve the problem in a decentralized way, and ones that were solving it in a centralized way but were communicating that they are decentralized.
 Decentralized protocols, actually good ones and my faviroties were Connext and Hop. Centralized one, that was missleding users that they are decentralized was Orbiter. After few month Layerswap was introduced, it was centralized one, but had no communication around that question (not claiming that centralized nor claming that decentralized). Btw I am founder of Layerswap, so will tell you some more details around our deceision making at that time. So lets go step by step and explore each of these solution.
@@ -78,7 +78,7 @@ We will be exploring each interop protocol through 4 lenses:
 Alongside with it, will try to share my experience and some notes. As the problem intensified with L2s, one of the first solutions that arised was the HOP Protocol. Specifically designed for Ethereum L2s.
 I will present a flow chart to capture the basic idea of the protocol and will not with colors action done by specific participant or component.
 
-![This is an image](/img/interop/colors.jpg)
+![colors](/img/interop/colors.jpg)
 
 - **User** - Person doing the cross-chain transaction
 - **Solver/Pool** - Solver or Liqudity Pool or any participant who is frontrunning the liquidity
@@ -87,156 +87,270 @@ I will present a flow chart to capture the basic idea of the protocol and will n
 
 The core design idea of flowschars were inspired from Acrross Prime Blogpost. Will talk about it Across and Across Prime later in the post.
 
-### Multichain (AnySwap)
+#### Full list of the protocols covered in this post
+
+- [Multichain](#multichain)
+- [Wormhole](#wormhole)
+- [Axelar](#axelar)
+- [HOP](#hop)
+- [Connext V2 Protocol](#connext-v2)
+- [Across](#across)
+- [deBridge](#debridgede)
+- [ChainFlip](#chainflip)
+- [Stargate](#stargate)
+- [Everclear](#everclear)
+- [Meson](#meson)
+- [Centralized Bridges: Layerswap, Relay, Orbiter](#centralized)
+- [TRAIN Protocol](#train)
+- [LayerZero](#layerzero)
+- [Hyperlane](#hyperlane)
+- [Synapse](#synapse)
+- [THORChain](#thorchain)
+- [CCIP](#ccip)
+- [1inch Fusion+](#1inch-fusion)
+- [Hyperbridge](#hyperbridge)
+- [Garden Finance](#garden-finance)
+
+### [Multichain](#multichain)
 
 ![Multichain protocol overview](/img/interop/multichain.jpg)
 
-Participants – User, network of SMPC nodes that control the Decentralized Management Account (vault)
-User flow - User deposits the native asset into the SMPC vault on the origin chain → SMPC nodes detect the event and mint 1 : 1 wrapped tokens to the user on the destination chain (or burn/mint in reverse). When the user later sends wrapped tokens back, the contract burns them and SMPC nodes release the originals from the vault.
-Security – Assets are at risk only if a ≥ threshold subset of SMPC nodes colludes; keys are never reconstructed and signatures require TSS (t,n) e.g., (15, 21). Finality on each chain is respected before mint/release.
-Extendability – Adding a chain means deploying the bridge contract + letting SMPC nodes run a light node for that chain; the same node set can serve EVM and non-EVM networks, so coverage scales easily.
+| Aspect        | Description |
+|---------------|-------------|
+| **Participants** | User, network of SMPC nodes that control the Decentralized Management Account (vault) |
+| **User flow** | User deposits the native asset into the SMPC vault on the origin chain → SMPC nodes detect the event and mint 1:1 wrapped tokens to the user on the destination chain (or burn/mint in reverse). When the user later sends wrapped tokens back, the contract burns them and SMPC nodes release the originals from the vault. |
+| **Security**  | Assets are at risk only if a ≥ threshold subset of SMPC nodes colludes; keys are never reconstructed and signatures require TSS (t,n) e.g., (15, 21). Finality on each chain is respected before mint/release. |
+| **Extendability** | Adding a chain means deploying the bridge contract + letting SMPC nodes run a light node for that chain; the same node set can serve EVM and non-EVM networks, so coverage scales easily. |
+
 On the paper Multichain was fairly decentralized, even more decentralized that all current interop protocols. Oh I forgot to mention that Multichain is not in operational state right now, apparently CEO was arrested and the whole protocol operations were stop. Not that MULTI sig apparently. We at Layerswap also lost around 40 ETH in Multichain, we used them for few routes for liqudity rebalancing and their operations were stopped, but their website was running so we just did the transaction and it is stuck forever. The Multichain case is a good reminder that any design that relay on closed set of few actors is inherently critical.
 
-### Wormhole
+### [Wormhole](#wormhole)
 
 ![Wormhole protocol overview](/img/interop/wormhole.jpg)
 
-Participants – User, Guardian Network - independent validator nodes that sign messages (VAAs*), Relayer carry a VAA to target chain.
-User flow – User emits a message (or token deposit) via the core contract on the source chain → Guardians observe and produce a VAA → Relayer submits the VAA to the destination contract, which verifies signatures and mints/unlocks the asset or executes the payload for the user.
-Security – Message executes only if the destination contract sees a valid threshold Guardian multisig; an attacker must corrupt strong majority Guardians. 
-Extendability – To support a new chain, deploy the core contracts and have Guardians run a light node there; Any chain type (EVM, Solana, etc.) can be onboarded.
+| Aspect            | Description |
+|-------------------|-------------|
+| **Participants**  | User, Guardian Network - independent validator nodes that sign messages (VAAs*), Relayer carry a VAA to target chain. |
+| **User flow**     | User emits a message (or token deposit) via the core contract on the source chain → Guardians observe and produce a VAA → Relayer submits the VAA to the destination contract, which verifies signatures and mints/unlocks the asset or executes the payload for the user. |
+| **Security**      | Message executes only if the destination contract sees a valid threshold Guardian multisig; an attacker must corrupt strong majority Guardians. |
+| **Extendability** | To support a new chain, deploy the core contracts and have Guardians run a light node there; Any chain type (EVM, Solana, etc.) can be onboarded. |
+
 *Verified Action Approvals (VAAs) are Wormhole's core messaging primitive. They are packets of cross-chain data emitted whenever a cross-chain application contract interacts with the Core Contract.
 
-Axelar NetworkAxelar Network Overview
+### [Axelar](#axelar)
 
-Participants – User, proof-of-stake validators that run the Cosmos-based Axelar network
-User flow – User calls the Gateway on the source chain (token transfer or General-Message-Passing call) → Validators observe the event, reach BFT consensus and co-sign an approval → an executor submits the approval to the Gateway on the destination chain → Gateway mints/unlocks tokens or executes the target contract, delivering assets/data to the user.
-Security – Cross-chain actions require a threshold of staked validators; mis-signing is punished by slashing. Because the same validator set runs its own consensus, Axelar inherits PoS security similar to other Cosmos chains.
-Extendability – Any chain that can host a Gateway contract (EVM, Cosmos SDK, etc.) can join; validators just add the new light client module. Once integrated, it gains immediate connectivity to all other Axelar-linked networks through the same validator set and message format.
+![Axelar protocol overview](/img/interop/axelar.jpg)
+
+| Aspect        | Description |
+|---------------|-------------|
+| **Participants** | User, proof-of-stake validators that run the Cosmos-based Axelar network |
+| **User Flow** | User calls the Gateway on the source chain (token transfer or General-Message-Passing call) → Validators observe the event, reach BFT consensus and co-sign an approval → an executor submits the approval to the Gateway on the destination chain → Gateway mints/unlocks tokens or executes the target contract, delivering assets/data to the user. |
+| **Security**  | Cross-chain actions require a threshold of staked validators; mis-signing is punished by slashing. Because the same validator set runs its own consensus, Axelar inherits PoS security similar to other Cosmos chains. |
+| **Extendability** | Any chain that can host a Gateway contract (EVM, Cosmos SDK, etc.) can join; validators just add the new light client module. Once integrated, it gains immediate connectivity to all other Axelar-linked networks through the same validator set and message format. |
+
 With this design,  as with Wormhole, adding a new chain is a big problem, because all of your existing validators should run a light client for the new chain, so with each chain added to Axlear, every Axlear node operator become way harder and resounrce expensive to run. Axelar actually addresses this problem with Axelar Amplifier network. Where you can add a network that core validators don't need to verify, you add a network with its own verifiers. But I am not quite sure how the security of the messages coming from verifiers is adapted and matched with message that is verified with 'core' validators.
-Hop ProtocolHOP Protocol Overview
 
+### [HOP](#hop)
 
-Participants: User, Bonders front liquidity, AMM LPs (hToken to Native).
-User Flow: Deposit canonical token → mint/burn hToken → bonder sends hToken on destination → auto-swap to native asset → L1 settlement reimburses bonder.
-Security: Users can’t lose funds—if no bonder steps in, the deposit still moves the slow way. Bonders risk their own capital and only get paid when an on-chain proof of your source-chain deposit is accepted on L1, so they can’t cheat. The system adds no extra validators; it leans on the security of the underlying chains.
-Extendability: Easy to add L2 within Ethereum ecosystem only. But not permisionless. Team has to do integration themselves.
-Connext V2 ProtocolConnext V2 Protocol Overview
+![HOP protocol overview](/img/interop/hop.jpg)
 
+| Aspect         | Description |
+|----------------|-------------|
+| **Participants** | User, Bonders front liquidity, AMM LPs (hToken to Native) |
+| **User Flow**    | Deposit canonical token → mint/burn hToken → bonder sends hToken on destination → auto-swap to native asset → L1 settlement reimburses bonder. |
+| **Security**     | Users can’t lose funds—if no bonder steps in, the deposit still moves the slow way. Bonders risk their own capital and only get paid when an on-chain proof of your source-chain deposit is accepted on L1, so they can’t cheat. The system adds no extra validators; it leans on the security of the underlying chains. |
+| **Extendability**| Easy to add L2 within Ethereum ecosystem only. But not permissionless. Team has to do integration themselves. |
 
-Participants: User → permissionless Routers (LPs) → optional Relayers pay gas.
-User Flow: xcall locks funds on source → router locks own liquidity on destination → user signs fulfillment → relayer submits proof → funds released on destination, router reimbursed on source.
-Security: Two-phase hashed-timelock; both chains escrow until matching proof is seen. No third-party consensus—safety equals source & destination chain security; timeout refunds if flow fails.
-Extendability: Works on any EVM (and portable to others); anyone can deploy contracts and become a router, so new chains/assets just need liquidity.
-Across ProtocolAcross Protocol Overview
+### [Connext V2](#connext-v2)
 
+![Connext V2 protocol overview](/img/interop/connext.jpg)
 
-Participants: User → open set of Solver → UMA Optimistic Oracle (voters) → mainnet Hub-Pool LPs.
-User Flow: User deposits to Spoke-Pool on source → fastest solver instantly sends funds on destination → solver submits claim to Oracle → after challenge window, relayer reimbursed from Ethereum Hub-Pool; slow canonical bridge later refills pool.
-Security: Optimistic oracle; any claim can be disputed and bond slashed. Users already have funds; worst case is oracle dispute—no user loss.
-Extendability: Has a dependency to an UMA protocol/Oracle System, theoretically can support all chains that have UMA protocol, currently only support EVM networks. Not permissionles - team has to do integration themselves.
-deBridgedeBridge Protocol Overview
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → permissionless Routers (LPs) → optional Relayers pay gas. |
+| **User Flow**    | xcall locks funds on source → router locks own liquidity on destination → user signs fulfillment → relayer submits proof → funds released on destination, router reimbursed on source. |
+| **Security**     | Two-phase hashed-timelock; both chains escrow until matching proof is seen. No third-party consensus—safety equals source & destination chain security; timeout refunds if flow fails. |
+| **Extendability**| Works on any EVM (and portable to others); anyone can deploy contracts and become a router, so new chains/assets just need liquidity. |
 
+### [Across](#across)
 
-Participants: User → on-chain deBridgeGate contracts → staked Validator network (≥⅔ signs) → anyone can be Claimer who submits signatures.
-User Flow: User send() emits submission → validators sign & upload to Arweave → claimer fetches signatures and calls claim() on destination → funds released / calldata executed.
-Security: Destination contract verifies threshold validator signatures; mis-signing slashed. Users can recall funds if never claimed; gas only paid by claimer.
-Extendability: Chain-agnostic; deploy Gate and add chain to validator nodes. Claiming is permissionless; validator seats governed by staking.
-ChainFlipChainFlip Protocol Overview
+![Across protocol overview](/img/interop/across.jpg)
 
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → open set of Solver → UMA Optimistic Oracle (voters) → mainnet Hub-Pool LPs. |
+| **User Flow**    | User deposits to Spoke-Pool on source → fastest solver instantly sends funds on destination → solver submits claim to Oracle → after challenge window, relayer reimbursed from Ethereum Hub-Pool; slow canonical bridge later refills pool. |
+| **Security**     | Optimistic oracle; any claim can be disputed and bond slashed. Users already have funds; worst case is oracle dispute—no user loss. |
+| **Extendability**| Has a dependency to an UMA protocol/Oracle System, theoretically can support all chains that have UMA protocol, currently only support EVM networks. Not permissionless - team has to do integration themselves. |
 
-Participants: User → chain-specific Vault → 100-of-150 FLIP-staked Validators run Substrate State-Chain & JIT-AMM → LPs provide liquidity.
-User Flow: User deposits native asset to Vault with swap details → validators witness deposit, record on State-Chain → AMM prices swap → validators TSS-sign native txn from destination-chain Vault → user receives asset.
-Security: Funds in Vaults controlled by FROST threshold; compromising requires super-majority of validators who face heavy slashing. Witnessing waits source-chain finality. No external oracles.
-Extendability: Supports EVM and non-EVM (BTC, SOL, DOT) by adding Vault adapters; validator seats permissionless auctions, LPs open; new assets need only AMM pool entry.
-StargateStargate Protocol Overview
+### [deBridge](#debridge)
 
+![deBridge protocol overview](/img/interop/across.jpg)
 
-Participants: User → Stargate Router & Pools → LayerZero Relayer + DVNs verify cross-chain proofs → LPs provide unified liquidity.
-User Flow: User swap() on source → Lo Relayer & DVNs deliver header & proof to destination endpoint → Router debits its pool, credits user with native asset.
-Security: Dual attestation: message executes only if Relayer and DVNs match; collusion required to forge. Users receive native assets, not wrappers.
-Extendability: Deploy Endpoint, Router & Pools on any chain whose headers can be read; unified pools share depth across networks. Liquidity, assets, and DVN slots are permissionless.
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → on-chain deBridgeGate contracts → staked Validator network (≥⅔ signs) → anyone can be Claimer who submits signatures. |
+| **User Flow**    | User send() emits submission → validators sign & upload to Arweave → claimer fetches signatures and calls claim() on destination → funds released / calldata executed. |
+| **Security**     | Destination contract verifies threshold validator signatures; mis-signing slashed. Users can recall funds if never claimed; gas only paid by claimer. |
+| **Extendability**| Chain-agnostic; deploy Gate and add chain to validator nodes. Claiming is permissionless; validator seats governed by staking. |
+
+### [ChainFlip](#chainflip)
+
+![deBridge protocol overview](/img/interop/chainflip.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → chain-specific Vault → 100-of-150 FLIP-staked Validators run Substrate State-Chain & JIT-AMM → LPs provide liquidity. |
+| **User Flow**    | User deposits native asset to Vault with swap details → validators witness deposit, record on State-Chain → AMM prices swap → validators TSS-sign native txn from destination-chain Vault → user receives asset. |
+| **Security**     | Funds in Vaults controlled by FROST threshold; compromising requires super-majority of validators who face heavy slashing. Witnessing waits source-chain finality. No external oracles. |
+| **Extendability**| Supports EVM and non-EVM (BTC, SOL, DOT) by adding Vault adapters; validator seats permissionless auctions, LPs open; new assets need only AMM pool entry. |
+
+### [Stargate](#stargate)
+
+![Stargate protocol overview](/img/interop/stargate.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → Stargate Router & Pools → LayerZero Relayer + DVNs verify cross-chain proofs → LPs provide unified liquidity. |
+| **User Flow**    | User swap() on source → Lo Relayer & DVNs deliver header & proof to destination endpoint → Router debits its pool, credits user with native asset. |
+| **Security**     | Dual attestation: message executes only if Relayer and DVNs match; collusion required to forge. Users receive native assets, not wrappers. |
+| **Extendability**| Deploy Endpoint, Router & Pools on any chain whose headers can be read; unified pools share depth across networks. Liquidity, assets, and DVN slots are permissionless. |
+
 Stargate has one of the deepest liqudities in the interop space. Works really neat and stable. They use 2 configured DVNs basically just 2 entity multisig, which I am not fun of and the technicall challange here is if they ramp up the security, lets say increase it to 4-8-12 DVNs the costs of the transaction would be skyrocketing and they will not be competetive in the market, considering that solutions like Layerswap and Relay, with a centralized (non-security) aproach are just attracting users - until something bad happens.
-EverclearEverclear Protocol Overview
 
+### [Everclear](#everclear)
 
-Partcipiants: User (targeted as Solver) creates an Intent; open, competitive Solvers pre-deposit liquidity and compete to fill it; on every chain a Spoke contract escrows user funds / solver balances, while a single Hub on the clearing chain nets and settles; off-chain Relayers & Cartographer bots batch the queues and relay messages over Hyperlane.
-User Flow: newIntent debits the user and queues an Intent on the source Spoke → off-chain agent dispatches it to the Hub → any Solver with balance on the destination Spoke calls fillIntent, paying the user instantly → a Fill message is sent to the Hub → when both messages are present the Hub “nets” them, issues a Settlement to whichever Spoke has liquidity, and the Solver’s on-chain balance is credited (withdrawable or reusable).
-Security: All assets stay inside audited Spoke/Hub contracts; Solvers can only spend what they’ve pre-deposited, and settlements are pure internal accounting, so no third-party custody risk. Messages move via Hyperlane, and intents are settled only when both intent + fill hashes match on the Hub, preventing mismatched or forged fills.
-Extendability: Adding a chain is just deploying a Spoke and Hyperlane connector—Everclear advertises permissionless chain expansion—and all roles (Solver, Relayer, Router) are open, letting liquidity and clearing depth grow wherever it’s profitable.
+![Everclear protocol overview](/img/interop/everclear.jpg)
 
-MesonMeson Protocol Overview
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User (targeted as Solver) creates an Intent; open, competitive Solvers pre-deposit liquidity and compete to fill it; on every chain a Spoke contract escrows user funds / solver balances, while a single Hub on the clearing chain nets and settles; off-chain Relayers & Cartographer bots batch the queues and relay messages over Hyperlane. |
+| **User Flow**    | newIntent debits the user and queues an Intent on the source Spoke → off-chain agent dispatches it to the Hub → any Solver with balance on the destination Spoke calls fillIntent, paying the user instantly → a Fill message is sent to the Hub → when both messages are present the Hub “nets” them, issues a Settlement to whichever Spoke has liquidity, and the Solver’s on-chain balance is credited (withdrawable or reusable). |
+| **Security**     | All assets stay inside audited Spoke/Hub contracts; Solvers can only spend what they’ve pre-deposited, and settlements are pure internal accounting, so no third-party custody risk. Messages move via Hyperlane, and intents are settled only when both intent + fill hashes match on the Hub, preventing mismatched or forged fills. |
+| **Extendability**| Adding a chain is just deploying a Spoke and Hyperlane connector—Everclear advertises permissionless chain expansion—and all roles (Solver, Relayer, Router) are open, letting liquidity and clearing depth grow wherever it’s profitable. |
 
+### [Meson](#meson)
 
-Participants: User → competitive Liquidity Providers (LPs) bond swaps and supply liquidity on every chain; a p2p / optional c-Relayer network just broadcasts messages (never holds funds); optional Trusted Verifiers can co-sign for absent users
-User Flow: user signs an off-chain swap request; relayers gossip it → first LP to win bonds the order on the source chain, escrow­ing the user’s tokens → he same LP instantly locks its own liquidity on the destination chain → user (or trusted verifier) signs one release signature; anyone calls release so the user receives funds on the destination chain → LP reuses that same signature to unlock the escrow + fee on the source chain
-Security: Classic HTLC atomic swap—either both locks release with the same signature or both expire and refund, so neither party can steal funds. No external validators or wrapped assets.
-Extendability: Deploying Meson contracts on a new chain automatically enables swaps with all existing chains, so work grows linearly not quadratically; supports EVM and non-EVM networks. All roles (LP, relayer, verifier) are permissionless, letting liquidity scale wherever profitable.
+![Meson protocol overview](/img/interop/meson.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → competitive Liquidity Providers (LPs) bond swaps and supply liquidity on every chain; a p2p / optional c-Relayer network just broadcasts messages (never holds funds); optional Trusted Verifiers can co-sign for absent users |
+| **User Flow**    | User signs an off-chain swap request; relayers gossip it → first LP to win bonds the order on the source chain, escrowing the user’s tokens → the same LP instantly locks its own liquidity on the destination chain → user (or trusted verifier) signs one release signature; anyone calls release so the user receives funds on the destination chain → LP reuses that same signature to unlock the escrow + fee on the source chain |
+| **Security**     | Classic HTLC atomic swap—either both locks release with the same signature or both expire and refund, so neither party can steal funds. No external validators or wrapped assets. |
+| **Extendability**| Deploying Meson contracts on a new chain automatically enables swaps with all existing chains, so work grows linearly not quadratically; supports EVM and non-EVM networks. All roles (LP, relayer, verifier) are permissionless, letting liquidity scale wherever profitable. |
+
 I user this bridge really rarely, but I thought its good to mention them as they use Atomic Swap workflow as well. They aproach with Trusted verifier is default in their dApp so basically you trust someone to not steal your funds (if they collide with LP they can steal) which I am not fun of and it completly demolishes the buity of Atomic Swaps. Again this is decision to stay competetive in the market, because as you could see with pure atomic swaps User's has to do 2 steps which noeone is fun of. As everythong things that the all problems with crypto is UX.
-Centralized Bridges: Layerswap, Relay, OrbiterCentralized Solver Bridges Overview
 
+### [Centralized Bridges: Layerswap, Relay, Orbiter](#centralized-bridges)
 
-Participants: User → Centralized Solver
-User Flow: User requests a quote → accepts → sends the asset straight to the solver → relayer instantly transfers the requested token on the destination chain from its own balances → relayer later rebalances and keeps the fee﻿
-Security: No Security Mechanism.
-Extendability: Works on any chain—no contracts or liquidity pools needed there—as long as solver wants to integrate the network.
+![Centralized bridges overview](/img/interop/layerswap.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User → Centralized Solver |
+| **User Flow**    | User requests a quote → accepts → sends the asset straight to the solver → relayer instantly transfers the requested token on the destination chain from its own balances → relayer later rebalances and keeps the fee |
+| **Security**     | No Security Mechanism. |
+| **Extendability**| Works on any chain—no contracts or liquidity pools needed there—as long as solver wants to integrate the network. |
+
 Oh boooy. These players are kind of distruptive in this space. As with a centralized design you can is WAY easier to operate solver, way easeir 
-TRAINTRAIN Protocol Overview
 
+### [TRAIN](#train)
 
-Participants: User with an Intent → competitive Solvers (liquidity providers) listed in the on-chain Discovery registry → an off-chain Auction picks the best Solver → swap is executed by minimal PreHTLC contracts on each chain.
-User Flow: User commits funds on the source chain (commit) → PreHTLC escrow starts → Solver locks equivalent funds on the destination chain (lock) → User (or wallet) forwards the hashlock back with addLock on the source. → Solver reveals the secret (redeem): user gets funds instantly on the destination, Solver claims the source escrow.
-Security: Pure atomic-swap (PreHTLC/HTLC) logic—either both chains unlock with the same secret or both refunds occur, so user funds cannot be stolen. Solvers post an extra reward that is slashed on failure, and there are no pooled vaults or upgradeable contracts, limiting attack surface.
-Extendability: Deploying the standard contracts on a new chain (EVM or non-EVM) automatically links it to all existing networks; Solvers self-register via Discovery, so the system scales completely permissionlesly to any chain.
+![TRAIN protocol overview](/img/interop/train.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User with an Intent → competitive Solvers (liquidity providers) listed in the on-chain Discovery registry → an off-chain Auction picks the best Solver → swap is executed by minimal PreHTLC contracts on each chain. |
+| **User Flow**    | User commits funds on the source chain (commit) → PreHTLC escrow starts → Solver locks equivalent funds on the destination chain (lock) → User (or wallet) forwards the hashlock back with addLock on the source → Solver reveals the secret (redeem): user gets funds instantly on the destination, Solver claims the source escrow. |
+| **Security**     | Pure atomic-swap (PreHTLC/HTLC) logic—either both chains unlock with the same secret or both refunds occur, so user funds cannot be stolen. Solvers post an extra reward that is slashed on failure, and there are no pooled vaults or upgradeable contracts, limiting attack surface. |
+| **Extendability**| Deploying the standard contracts on a new chain (EVM or non-EVM) automatically links it to all existing networks; Solvers self-register via Discovery, so the system scales completely permissionlessly to any chain. |
+
 I am co-founder of this protocol. Take this with bunch of salt.
-LayerZeroLayerZero Protocol Overview
 
+### [LayerZero](#layerzero)
 
-Participants User / OApp → immutable Endpoint contracts → configurable set of DVNs (Decentralized Verifier Networks) that attest each payloadHash → off-chain Executor that pays gas and calls the destination contract
-User Flow App calls lzSend() on the source Endpoint → Each chosen DVN independently delivers an attestation of the message hash to the destination chain → When the channel’s X-of-Y-of-N DVN threshold is met, any Executor commits the message to the destination Endpoint and triggers lzReceive() in the target contract—completing the cross-chain action.
-Security Message executes only if the configured DVN quorum matches on the same hash; no single party can forge data. Apps can mix first-party DVNs, third-party services, or their own adapters, and can lock configs so they can’t be changed later. All core contracts are non-upgradeable.
-Extendability To add a chain you merely deploy the Endpoint; any group can run DVNs/Executors for it. Because security is app-level-configurable, new networks join without diluting existing guarantees.
-HyperlaneHyperlane protocol overview
+![LayerZero protocol overview](/img/interop/layerzero.jpg)
 
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User / OApp → immutable Endpoint contracts → configurable set of DVNs (Decentralized Verifier Networks) that attest each payloadHash → off-chain Executor that pays gas and calls the destination contract |
+| **User Flow**    | App calls lzSend() on the source Endpoint → Each chosen DVN independently delivers an attestation of the message hash to the destination chain → When the channel’s X-of-Y-of-N DVN threshold is met, any Executor commits the message to the destination Endpoint and triggers lzReceive() in the target contract—completing the cross-chain action. |
+| **Security**     | Message executes only if the configured DVN quorum matches on the same hash; no single party can forge data. Apps can mix first-party DVNs, third-party services, or their own adapters, and can lock configs so they can’t be changed later. All core contracts are non-upgradeable. |
+| **Extendability**| To add a chain you merely deploy the Endpoint; any group can run DVNs/Executors for it. Because security is app-level-configurable, new networks join without diluting existing guarantees. |
 
-Participants User / Mailbox contract → off-chain Relayers carry messages → application-chosen Interchain Security Module (ISM) verifies them. Default Multisig-ISM is secured by staked Validators using HYPER via Symbiotic restaking; apps can swap or compose ISMs at will.
-User Flow dispatch() writes the message to the source Mailbox → Validators (if required by the ISM) sign the Merkle checkpoint → A Relayer submits deliver() on the destination chain, packaging the signatures / proof that the chosen ISM expects → The ISM’s verify() passes → Mailbox calls the destination app.
-Security Completely modular: every app selects or builds an ISM (Multisig, Aggregation, ZK-proof, etc.). Slashing applies when a staking-based ISM (e.g., Symbiotic vault) is used, giving economic finality; if verification fails, the message is simply never executed.
-Extendability Deploy Mailbox + any ISM on a new chain and point Relayers at it—no permission needed. Because security is pluggable, chains with different trust models can interoperate while apps still pick the guarantees they want.
-SynapseSynapse Protocol Overview
+### [Hyperlane](#hyperlane)
 
+![Hyperlane protocol overview](/img/interop/hyperlane.jpg)
 
-Participants – User / Bridge contract → off-chain Relayers that front gas & deliver messages → Guard entities that watch every relay during an optimistic dispute window → LPs in Synapse pools supply cross-chain liquidity.
-User Flow – ① User submits a bridge tx via Synapse Router. ② A Relayer executes the matching transaction on the destination chain, giving the user their funds immediately. ③ Relayer posts a prove tx on the origin chain; Guards monitor the relay and can dispute during the set window. ④ If undisputed, the Relayer claims reimbursement from the escrowed funds; if disputed, their bond is slashed and the user’s transfer falls back to the slow path.
-Security – SIN is optimistic: only a single honest Guard needs to challenge a bad relay. Relayers post collateral and are paid only after the dispute period ends, creating strong economic guarantees without a standing validator multisig.
-Extendability – Bridge, Router, and SIN contracts are live on 20 + EVM & non-EVM chains; adding another network just means deploying the standard contracts and pointing Relayers/Guards at it— all roles (Relayer, Guard, LP) are permissionless.
-THORChainTHOR Protocol Overview
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User / Mailbox contract → off-chain Relayers carry messages → application-chosen Interchain Security Module (ISM) verifies them. Default Multisig-ISM is secured by staked Validators using HYPER via Symbiotic restaking; apps can swap or compose ISMs at will. |
+| **User Flow**    | dispatch() writes the message to the source Mailbox → Validators (if required by the ISM) sign the Merkle checkpoint → A Relayer submits deliver() on the destination chain, packaging the signatures / proof that the chosen ISM expects → The ISM’s verify() passes → Mailbox calls the destination app. |
+| **Security**     | Completely modular: every app selects or builds an ISM (Multisig, Aggregation, ZK-proof, etc.). Slashing applies when a staking-based ISM (e.g., Symbiotic vault) is used, giving economic finality; if verification fails, the message is simply never executed. |
+| **Extendability**| Deploy Mailbox + any ISM on a new chain and point Relayers at it—no permission needed. Because security is pluggable, chains with different trust models can interoperate while apps still pick the guarantees they want. |
 
+### [Synapse](synapse)
 
-Participants – Swapper (user) → chain-specific inbound address → ~100 Validator Nodes running a Cosmos-SDK chain; they collectively control Asgard TSS vaults and lightweight Yggdrasil vaults → external Liquidity Providers fund RUNE-paired pools.
-User Flow – ① User sends native L1 asset with a swap memo to an inbound address. ② Nodes observe the deposit; once a super-majority see it, the swap is priced via THORChain’s RUNE-centric AMM. ③ Nodes co-sign an outbound TSS transaction from the Asgard vault on the destination chain; one node broadcasts it. ④ User receives the target asset natively—no wrappers or waiting periods.
-Security – All vault keys are split with GG20 threshold signatures; stealing funds requires ≥ ⅔ of bonded nodes, who would lose their RUNE bond and future rewards. Nodes run full-nodes for each connected chain, verifying finality before signing.
-Extendability – Governance can add any L1 chain by having validators run its full-node and integrating a Bifrost module; vault sharding lets the network scale beyond 40 nodes, and liquidity pools are permissionless so assets and chains can be added as demand grows.
-CCIP by ChainlinkCCIP Protocol Overview
+![Hyperlane protocol overview](/img/interop/synapse.jpg)
 
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User / Bridge contract → off-chain Relayers that front gas & deliver messages → Guard entities that watch every relay during an optimistic dispute window → LPs in Synapse pools supply cross-chain liquidity. |
+| **User Flow**    | ① User submits a bridge tx via Synapse Router. ② A Relayer executes the matching transaction on the destination chain, giving the user their funds immediately. ③ Relayer posts a prove tx on the origin chain; Guards monitor the relay and can dispute during the set window. ④ If undisputed, the Relayer claims reimbursement from the escrowed funds; if disputed, their bond is slashed and the user’s transfer falls back to the slow path. |
+| **Security**     | SIN is optimistic: only a single honest Guard needs to challenge a bad relay. Relayers post collateral and are paid only after the dispute period ends, creating strong economic guarantees without a standing validator multisig. |
+| **Extendability**| Bridge, Router, and SIN contracts are live on 20+ EVM & non-EVM chains; adding another network just means deploying the standard contracts and pointing Relayers/Guards at it—all roles (Relayer, Guard, LP) are permissionless. |
 
-Participants — User, staked Committing DON (Chainlink oracle nodes that sign every cross-chain message) , independent Risk-Management DON that re-verifies each commit → any Executor submits the attested payload and pays gas on the destination chain. 
-User Flow — ① User calls ccipSend() (message or “Programmable Token Transfer”). ② Committing DON observes the event, reaches BFT consensus, and writes an attestation for the payload to the destination chain. ③ Risk-Management DON simultaneously monitors every transfer and can halt any that breach pre-set limits. ④ Once the required signatures are final, any Executor triggers ccipReceive(), which unlocks / mints tokens or hands data to the target contract—all in a single on-chain tx for the user. 
-Security — “Level-5” defense-in-depth: a forged message would require collusion of both DONs and the Executor; the Risk-Management DON is written in a different language and runs on separate infra to reduce correlated risk. Nodes are economically bonded and slashable; Routers are immutable and can enforce per-token rate limits. 
-Extendability — Any chain that can host the Router contracts can integrate; Chainlink nodes just add a light-client module, so new L1s/L2s join without changes to existing networks. The v1.5 CCT (Cross-Chain Token) standard and Token Manager let issuers plug tokens into CCIP with minimal code, while dApps choose their own Executors/DON sets.
-1inch Fusion+1inch Fusion+ Protocol Overview
+### [THORChain](#thorchain)
 
+![THOR protocol overview](/img/interop/thor.jpg)
 
-Participants - Maker (user) signs an intent with a minimum-return; competing Resolvers (KYC’d market-makers that pre-fund liquidity and stake 1INCH for “Unicorn Power”) race to fill it; a lightweight 1inch Relayer/Auction engine broadcasts orders and later reveals the secret; anyone may be the on-chain Executor that posts the final tx and receives a small tip.
-User Flow - Maker’s signed order enters a Dutch auction; resolvers bid off-chain. 2⃣ Winning resolver escrows Maker’s tokens on source chain and its own payout on destination, both in identical HTLC escrows (same hashlock + timelocks). 3⃣ Relayer reveals the secret ➜ resolver unlocks its refund on source, then uses the same secret to release Maker’s tokens on destination. 4⃣ If no one acts before timeout, any resolver can cancel both escrows and return funds (safety-deposit tip incentives this).
-Security - Pure hash-timelock atomicity – either both escrows unlock with the revealed secret or both refund, so funds can’t be stolen. Resolvers post an extra safety-deposit and risk lost auction costs, aligning incentives.
-Extendability - To support a new L1/L2, deploy the standard 1inch Escrow contract; Fusion + instantly links it to all other chains because swaps are peer-to-peer between resolvers and makers. Resolver and executor roles are open (after compliance onboarding), so liquidity scales wherever profits exist.
-Hyperbridge
-Participants - User / App on any connected chain → on-chain Dispatcher / ISMP Host contract → Hyperbridge parachain (runs as a Polkadot parachain and aggregates proofs) → fully permissionless Relayers (“Tesseract”) that move messages and pay gas; no validator multisig or whitelists.
-User Flow - 1⃣ User calls send() on the source contract with payload + fee (example in docs). 2⃣ Dispatcher posts a commitment that the Hyperbridge parachain picks up and includes in its block. 3⃣ Any relayer fetches the cross-chain proof from the parachain and submits it to the destination chain’s ISMP Host. 4⃣ Host verifies the aggregated proof root; if valid, it calls the destination app (handle()), delivering tokens / data in one tx.
-Security - Hyperbridge verifies full consensus & state proofs (GRANDPA, Sync-Committee, etc.) inside its parachain, then emits an aggregated root; destination chains check this cryptographic proof, so no extra trust is added. Relayers are permissionless couriers— they can’t forge messages and are paid only after proof acceptance.
-Extendability - Chain-agnostic: add a network by implementing its consensus + state client in the ISMP library and deploying the Host contract—no multisig or liquidity pools needed. Relayer and node roles are open, SDKs exist for Solidity & Polkadot, so coverage scales as soon as someone spins up a node and liquidity isn’t required.
-Aggregators
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | Swapper (user) → chain-specific inbound address → ~100 Validator Nodes running a Cosmos-SDK chain; they collectively control Asgard TSS vaults and lightweight Yggdrasil vaults → external Liquidity Providers fund RUNE-paired pools. |
+| **User Flow**    | ① User sends native L1 asset with a swap memo to an inbound address. ② Nodes observe the deposit; once a super-majority see it, the swap is priced via THORChain’s RUNE-centric AMM. ③ Nodes co-sign an outbound TSS transaction from the Asgard vault on the destination chain; one node broadcasts it. ④ User receives the target asset natively—no wrappers or waiting periods. |
+| **Security**     | All vault keys are split with GG20 threshold signatures; stealing funds requires ≥ ⅔ of bonded nodes, who would lose their RUNE bond and future rewards. Nodes run full-nodes for each connected chain, verifying finality before signing. |
+| **Extendability**| Governance can add any L1 chain by having validators run its full-node and integrating a Bifrost module; vault sharding lets the network scale beyond 40 nodes, and liquidity pools are permissionless so assets and chains can be added as demand grows. |
+
+### [CCIP](#ccip)
+
+![THOR protocol overview](/img/interop/ccip.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User, staked Committing DON (Chainlink oracle nodes that sign every cross-chain message), independent Risk-Management DON that re-verifies each commit → any Executor submits the attested payload and pays gas on the destination chain. |
+| **User Flow**    | ① User calls ccipSend() (message or “Programmable Token Transfer”). ② Committing DON observes the event, reaches BFT consensus, and writes an attestation for the payload to the destination chain. ③ Risk-Management DON simultaneously monitors every transfer and can halt any that breach pre-set limits. ④ Once the required signatures are final, any Executor triggers ccipReceive(), which unlocks / mints tokens or hands data to the target contract—all in a single on-chain tx for the user. |
+| **Security**     | “Level-5” defense-in-depth: a forged message would require collusion of both DONs and the Executor; the Risk-Management DON is written in a different language and runs on separate infra to reduce correlated risk. Nodes are economically bonded and slashable; Routers are immutable and can enforce per-token rate limits. |
+| **Extendability**| Any chain that can host the Router contracts can integrate; Chainlink nodes just add a light-client module, so new L1s/L2s join without changes to existing networks. The v1.5 CCT (Cross-Chain Token) standard and Token Manager let issuers plug tokens into CCIP with minimal code, while dApps choose their own Executors/DON sets. |
+
+### [1inch Fusion+](#1inch-fusion)
+
+![1inch Fusion+ protocol overview](/img/interop/ccip.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | Maker (user) signs an intent with a minimum-return; competing Resolvers (KYC’d market-makers that pre-fund liquidity and stake 1INCH for “Unicorn Power”) race to fill it; a lightweight 1inch Relayer/Auction engine broadcasts orders and later reveals the secret; anyone may be the on-chain Executor that posts the final tx and receives a small tip. |
+| **User Flow**    | Maker’s signed order enters a Dutch auction; resolvers bid off-chain. 2⃣ Winning resolver escrows Maker’s tokens on source chain and its own payout on destination, both in identical HTLC escrows (same hashlock + timelocks). 3⃣ Relayer reveals the secret ➜ resolver unlocks its refund on source, then uses the same secret to release Maker’s tokens on destination. 4⃣ If no one acts before timeout, any resolver can cancel both escrows and return funds (safety-deposit tip incentives this). |
+| **Security**     | Pure hash-timelock atomicity – either both escrows unlock with the revealed secret or both refund, so funds can’t be stolen. Resolvers post an extra safety-deposit and risk lost auction costs, aligning incentives. |
+| **Extendability**| To support a new L1/L2, deploy the standard 1inch Escrow contract; Fusion+ instantly links it to all other chains because swaps are peer-to-peer between resolvers and makers. Resolver and executor roles are open (after compliance onboarding), so liquidity scales wherever profits exist. |
+
+### [Hyperbridge](#hyperbridge)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User / App on any connected chain → on-chain Dispatcher / ISMP Host contract → Hyperbridge parachain (runs as a Polkadot parachain and aggregates proofs) → fully permissionless Relayers (“Tesseract”) that move messages and pay gas; no validator multisig or whitelists. |
+| **User Flow**    | 1⃣ User calls send() on the source contract with payload + fee (example in docs). 2⃣ Dispatcher posts a commitment that the Hyperbridge parachain picks up and includes in its block. 3⃣ Any relayer fetches the cross-chain proof from the parachain and submits it to the destination chain’s ISMP Host. 4⃣ Host verifies the aggregated proof root; if valid, it calls the destination app (handle()), delivering tokens / data in one tx. |
+| **Security**     | Hyperbridge verifies full consensus & state proofs (GRANDPA, Sync-Committee, etc.) inside its parachain, then emits an aggregated root; destination chains check this cryptographic proof, so no extra trust is added. Relayers are permissionless couriers— they can’t forge messages and are paid only after proof acceptance. |
+| **Extendability**| Chain-agnostic: add a network by implementing its consensus + state client in the ISMP library and deploying the Host contract—no multisig or liquidity pools needed. Relayer and node roles are open, SDKs exist for Solidity & Polkadot, so coverage scales as soon as someone spins up a node and liquidity isn’t required. |
+
+### [Garden Finance](garden-finance)
+
+#### Resource Locks
+
+#### Shared Bridges
+
+#### Aggregators
+
 https://www.bungee.exchange/litepaper.pdf
 Intents vs Messaging
 This is a bullshit question, and bullshit debate. There was never this question, it was just made a mainstream by few influental founders to keep people busy. This has not technological explanation, like almost any Intent based bridge in some ways uses a cross-chain messaging. It's not a debate at all. I think the better question to explore is Intents VS Pools, a more better way to say is Active LPs VS Passive LPs. Probably will have some follow up posts about this later.
