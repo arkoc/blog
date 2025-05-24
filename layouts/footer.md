@@ -1,0 +1,1 @@
+The blog is built with [Hugo](https://gohugo.io) using the [nostyleplease](https://github.com/hanwenguo/hugo-theme-nostyleplease) theme. All posts are available on [GitHub](https://github.com/arkoc/blog). If you find anything incorrect, feel free to open an issue or submit a pull request.
