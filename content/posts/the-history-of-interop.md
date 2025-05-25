@@ -113,6 +113,8 @@ The core design idea of flowschars were inspired from Acrross Prime Blogpost. Wi
 
 ### [Multichain](#multichain)
 
+A 21-node SMPC network that mints and burns wrapped tokens held in threshold-controlled vaults across dozens of chains.
+
 ![Multichain protocol overview](/img/interop/multichain.jpg)
 
 | Aspect        | Description |
@@ -125,6 +127,8 @@ The core design idea of flowschars were inspired from Acrross Prime Blogpost. Wi
 On the paper Multichain was fairly decentralized, even more decentralized that all current interop protocols. Oh I forgot to mention that Multichain is not in operational state right now, apparently CEO was arrested and the whole protocol operations were stop. Not that MULTI sig apparently. We at Layerswap also lost around 40 ETH in Multichain, we used them for few routes for liqudity rebalancing and their operations were stopped, but their website was running so we just did the transaction and it is stuck forever. The Multichain case is a good reminder that any design that relay on closed set of few actors is inherently critical.
 
 ### [Wormhole](#wormhole)
+
+ A 19-guardian validator network that signs verifiable action approvals (VAAs) to relay assets and messages between heterogeneous chains.
 
 ![Wormhole protocol overview](/img/interop/wormhole.jpg)
 
@@ -139,6 +143,8 @@ On the paper Multichain was fairly decentralized, even more decentralized that a
 
 ### [Axelar](#axelar)
 
+Cosmos-based PoS network whose validator set co-signs gateway contracts for programmable cross-chain messaging and token transfers.
+
 ![Axelar protocol overview](/img/interop/axelar.jpg)
 
 | Aspect        | Description |
@@ -152,6 +158,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 
 ### [HOP](#hop)
 
+Rollup-centric bridge where bonders front hToken liquidity, AMMs swap to native assets, and the canonical bridge provides the slow-path fallback.
+
 ![HOP protocol overview](/img/interop/hop.jpg)
 
 | Aspect         | Description |
@@ -162,6 +170,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 | **Extendability**| Easy to add L2 within Ethereum ecosystem only. But not permissionless. Team has to do integration themselves. |
 
 ### [Connext V2](#connext-v2)
+
+A liquidity-network bridge that uses hashed-timelock atomic swaps and permissionless routers for fast, trust-minimized transfers across EVM chains.
 
 ![Connext V2 protocol overview](/img/interop/connext.jpg)
 
@@ -174,6 +184,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 
 ### [Across](#across)
 
+An optimistic, insured bridge where bonded relayers front funds instantly and UMA’s oracle later settles or slashes mis-behaviour.
+
 ![Across protocol overview](/img/interop/across.jpg)
 
 | Aspect           | Description |
@@ -184,6 +196,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 | **Extendability**| Has a dependency to an UMA protocol/Oracle System, theoretically can support all chains that have UMA protocol, currently only support EVM networks. Not permissionless - team has to do integration themselves. |
 
 ### [deBridge](#debridge)
+
+ A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
 
 ![deBridge protocol overview](/img/interop/across.jpg)
 
@@ -196,6 +210,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 
 ### [ChainFlip](#chainflip)
 
+A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct L1-to-L1 swaps without wrapping.
+
 ![deBridge protocol overview](/img/interop/chainflip.jpg)
 
 | Aspect           | Description |
@@ -206,6 +222,8 @@ With this design,  as with Wormhole, adding a new chain is a big problem, becaus
 | **Extendability**| Supports EVM and non-EVM (BTC, SOL, DOT) by adding Vault adapters; validator seats permissionless auctions, LPs open; new assets need only AMM pool entry. |
 
 ### [Stargate](#stargate)
+
+A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver real (not wrapped) tokens.
 
 ![Stargate protocol overview](/img/interop/stargate.jpg)
 
@@ -220,6 +238,8 @@ Stargate has one of the deepest liqudities in the interop space. Works really ne
 
 ### [Everclear](#everclear)
 
+ A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
+
 ![Everclear protocol overview](/img/interop/everclear.jpg)
 
 | Aspect           | Description |
@@ -230,6 +250,8 @@ Stargate has one of the deepest liqudities in the interop space. Works really ne
 | **Extendability**| Adding a chain is just deploying a Spoke and Hyperlane connector—Everclear advertises permissionless chain expansion—and all roles (Solver, Relayer, Router) are open, letting liquidity and clearing depth grow wherever it’s profitable. |
 
 ### [Meson](#meson)
+
+Pure HTLC atomic-swap network letting LPs match stable-coin transfers between any chains with no validators or wrapped assets.
 
 ![Meson protocol overview](/img/interop/meson.jpg)
 
@@ -270,6 +292,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 
 ### [LayerZero](#layerzero)
 
+Modular messaging layer that uses configurable decentralized verifier networks plus executors to deliver payloads without middle chains.
+
 ![LayerZero protocol overview](/img/interop/layerzero.jpg)
 
 | Aspect           | Description |
@@ -280,6 +304,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 | **Extendability**| To add a chain you merely deploy the Endpoint; any group can run DVNs/Executors for it. Because security is app-level-configurable, new networks join without diluting existing guarantees. |
 
 ### [Hyperlane](#hyperlane)
+
+ “Choose-your-own-security” mailboxes where each app picks its interchain security module—multisig, staking, ZK, or custom—for permissionless messaging.
 
 ![Hyperlane protocol overview](/img/interop/hyperlane.jpg)
 
@@ -292,7 +318,9 @@ I am co-founder of this protocol. Take this with bunch of salt.
 
 ### [Synapse](synapse)
 
-![Hyperlane protocol overview](/img/interop/synapse.jpg)
+Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
+
+![Synapse protocol overview](/img/interop/synapse.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
@@ -302,6 +330,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 | **Extendability**| Bridge, Router, and SIN contracts are live on 20+ EVM & non-EVM chains; adding another network just means deploying the standard contracts and pointing Relayers/Guards at it—all roles (Relayer, Guard, LP) are permissionless. |
 
 ### [THORChain](#thorchain)
+
+Bonded node network with TSS Asgard vaults and a RUNE-paired AMM that swaps native L1 assets directly.
 
 ![THOR protocol overview](/img/interop/thor.jpg)
 
@@ -314,6 +344,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 
 ### [CCIP](#ccip)
 
+Chainlink’s cross-chain protocol that moves tokens and messages via dual oracle networks and an independent risk-management guard.
+
 ![THOR protocol overview](/img/interop/ccip.jpg)
 
 | Aspect           | Description |
@@ -324,6 +356,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 | **Extendability**| Any chain that can host the Router contracts can integrate; Chainlink nodes just add a light-client module, so new L1s/L2s join without changes to existing networks. The v1.5 CCT (Cross-Chain Token) standard and Token Manager let issuers plug tokens into CCIP with minimal code, while dApps choose their own Executors/DON sets. |
 
 ### [1inch Fusion+](#1inch-fusion)
+
+Bridge-less Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
 
 ![1inch Fusion+ protocol overview](/img/interop/ccip.jpg)
 
@@ -336,6 +370,8 @@ I am co-founder of this protocol. Take this with bunch of salt.
 
 ### [Hyperbridge](#hyperbridge)
 
+Proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain.
+
 | Aspect           | Description |
 |------------------|-------------|
 | **Participants** | User / App on any connected chain → on-chain Dispatcher / ISMP Host contract → Hyperbridge parachain (runs as a Polkadot parachain and aggregates proofs) → fully permissionless Relayers (“Tesseract”) that move messages and pay gas; no validator multisig or whitelists. |
@@ -344,6 +380,15 @@ I am co-founder of this protocol. Take this with bunch of salt.
 | **Extendability**| Chain-agnostic: add a network by implementing its consensus + state client in the ISMP library and deploying the Host contract—no multisig or liquidity pools needed. Relayer and node roles are open, SDKs exist for Solidity & Polkadot, so coverage scales as soon as someone spins up a node and liquidity isn’t required. |
 
 ### [Garden Finance](garden-finance)
+
+ Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User ⇄ competitive Solvers (LPs that pre-deposit liquidity and stake SEED) picked by a decentralized order-book; optional Relayers just broadcast signed messages; Stakers back solvers and get slashed on failure. |
+| **User Flow**    | 1️⃣ User requests quote → signs an intent and posts it to the order-book. 2️⃣ Auction selects the best solver. 3️⃣ User deposits BTC/WBTC/etc. into an HTLC vault on the source chain; solver locks matching funds on the destination. 4️⃣ User reveals the secret to claim funds; the same secret lets the solver unlock the source-side vault and collect payment. 5️⃣ If either party stalls, timelocks refund the original owner and solvers/stakers are slashed. |
+| **Security**     | Swap = pure HTLC atomicity—either both chains release with the same secret or both refund, so no custody risk. SEED staking + slashing penalizes mis-fills. |
+| **Extendability**| Supports Bitcoin L1 plus many EVM L1/L2s; adding a chain is just deploying the standard vault contracts and pointing solvers/relayers at it—every new chain immediately interoperates with all others, and all roles remain permissionless. |
 
 #### Resource Locks
 
