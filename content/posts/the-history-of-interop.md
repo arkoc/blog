@@ -8,13 +8,13 @@ The blockchain ecosystem began with a singular, isolated network—Bitcoin. As m
 
 This post is going to be technical, diving deeper into each solution that emerged during this time and also will give you a glimpse of how future technologies look like. It's not just a fact/research post, it's the history filled with my own experiences and opinions about interop and crypto overall.
 
-### Bitcoin
+## Bitcoin
 
 Let's step back and remember when it started and how we created this problem. It all started with Bitcoin. Once Bitcoin was live, for the first time in the history of humanity we had a digital non-replicable piece of information. I like to phrase it this way, because we had digital money for a long time before Bitcoin. We have it now as well, in online banking systems; in fact, most of the money is anyway digital. The innovation of Bitcoin was that now you have a piece of information, a bunch of 1s and 0s, that are not simply copy-pastable. Because before it, you (or someone else) could just replicate all the 1s and 0s and result in the same original data, without any difference between the original and new one. And here it comes, Bitcoin was born, as an implementation of digital currency.
 
 Anyway, this is not a post about Bitcoin. Fast-forward to October 2011, Bitcoin saw tremendous growth. In June 2011 it reached $200M market cap (then quickly dropped to $30M, just a reminder what this space looked like). The block producing became way more expensive than it started. In 2010 just 2 leading 0's were necessary for mining. A quick recap: mining is the process for miners, where they combine the block and calculate a HASH function on top of that information. Mining difficulty was determined by how many 0s should be included in the hash that can be accepted. For this, miners have a 'Nonce' field that they could manipulate with original block data to result in a hash that has 0s. It's almost impossible to guess, so miners do brute-forcing; how many more 0s are required in hash, that makes the mining exponentially (or different function, idk) difficult. So back to 2011, mining complexity increased from 1-2 to 5-6 zeros. For curious minds, now it's 20. This was a huge spike.
 
-### Litecoin
+## Litecoin
 
 Growth of Bitcoin hinted at multiple scalability issues that could happen if Bitcoin grows more. So a couple of projects emerged. Welcome on stage the Litecoin. Litecoin was developed in October 2011 by Charlie Lee, a former Google engineer, as a “lite” version of Bitcoin. The main promise of Litecoin was that it can be faster, it can be cheaper to do mining. 
 I remember back at that time my friend had a few GPUs doing Bitcoin mining and he was complaining that it's already non-profitable and when Litecoin was announced, he was super excited and just jumped right away to it. At that time I was like this guy is a crazy weirdo.
@@ -23,7 +23,7 @@ Charlie Lee explicitly stated Litecoin wasn’t meant to compete with or replace
 
 In short, Litecoin was created to scale the crypto ecosystem. Enough of the history here, this was written 1000s of times, even more, if you just ask ChatGPT, it will generate this same blog post (except the non-important parts where I told that my friend was doing mining). So what did the crypto space look like at that time? You had BTC asset in Bitcoin network and you had LTC asset in Litecoin network. Those networks were sovereign networks, separate from each other, none of them knew that there is another asset somewhere else. And a simple question arises from this situation: if I have a BTC, how do I get an LTC? BIG QUESTION. No answer until 2013. But what would people do? They would just use CEXes (at that time for example Mt. Gox). You could deposit BTC, sell it to USD, and then buy LTC and withdraw to LTC. Nice! Would you be surprised that people now in 2025 use this exact flow when they need to do this kind of operation? Something is definitely off, but we'll get to that along the post. Now let's get back to the first technical solution that was proposed for this problem.
 
-### Atomic Swaps
+## Atomic Swaps
 
 Year 2013, May 02, 10:35 AM, a guy named Tier Nolan, hit the submit button in BitcoinTalks forum. Alt chains and atomic transfers. This was the first time that a trustless secure way was proposed for swapping Litecoin with Bitcoin. This solution takes advantage of Bitcoin P2SH (Pay to Script Hash) addresses. Bitcoin uses a simple scripting language, that allows you to do some basic scripting, like arithmetics and basic cryptographic.
 
@@ -44,33 +44,30 @@ After this idea, the real world implementations emerged. One of the greatest and
 The Lightning Network is an off-chain payment protocol that allows users to send/receive Bitcoin instantly, with low fees and with highly scalable architecture.
 It achieves this by creating payment channels — temporary smart contracts between two users that let them send funds back and forth without touching the blockchain for every transaction. Only the opening and closing of the channel are on-chain. Everything else happens off-chain. These opening and closing channel contracts are created with HTLC contracts.
 
-### Ethereum
+## Ethereum
 
 So far so good, we scratched the surface of the interoperability space and now as we move forward everything becomes way more complicated, so let's dive in.
 Let's fast forward one year to 2016, when great and almighty V and crew invented Ethereum. The foundation of creating Ethereum was the same idea: if we can have now non-replicable, verifiable piece of information, it means that this information was somehow created. In Bitcoin that information was limited, like UTXOs and some basic scripting, what if instead of that basic scripting we could have a fully functional programming language. Solidity and Ethereum were born. With this innovation Ethereum created a situation where new tokens could be created in Ethereum itself (ERC20s). Interop and Atomic Swaps were pushed back and it was not an important solution, as you could create as many tokens as possible in Ethereum - in the same chain, and then you would have protocols like Uniswap for changing them inside Ethereum without any interoperability mambo jumbo stuff.
 Additionally, CEXes were rising, so if someone needed to exchange BTC to ETH, they could still do it with CEXes. In the same way, deposit BTC to CEX, trade it to USDT then to ETH and withdraw it back.
 After a few years of tremendous success with Ethereum, it became evident that Ethereum needs to be scaled again. One-chain was not enough, during peak times blockchain was getting congested and fees were skyrocketing. For a few folks in the space including co-founder of Ethereum (Gavin Wood) it became evident that one-chain to rule them all is not going to work. So 2 independent projects were built around the same time: Polkadot and Cosmos, both had a vision to enable launching new chains - presumably each chain would be specialized for a specific application or use case. 
 
-### Cosmos
+## Cosmos
 
 Cosmos - introduces an idea of Hub and Zones. You will have a single blockchain HUB, that will connect all Zones, Zones are separate application-usecase-specific blockchains. They launched a Cosmos SDK, which allows you to launch your own network, with your own validators, tokens, customization and etc. On top of this they introduced one of the greatest interop solutions IBC. The core idea is that you can have sovereign chains, but these chains have a built-in interop solution (IBC). With IBC, it requires for each chain to run a light client for other chains, the ones that the chain wants to be connected. Running a Light Client is required so you could verify that something really happened on that other chain. Alternatively, you can be connected to Hub itself and only run a Light Client for Hub, with this design all chains can validate the Hub and route messages through Hub. This simplifies topology from O(n²) (direct links between all Zones) to O(n) (Zones only connect to Hubs). The latter is core design decision built-in in Polkadot.
 In IBC (Inter-Blockchain Communication), you do not directly specify the destination chain by name in the message like you would with an HTTP endpoint. Instead, the destination chain is implicitly defined by the channel and port you're using. You can find a channel that you want to use from block explorers like mapofzones.
 
-### Polkadot
+## Polkadot
 
 Polkadot - introduced an idea of Relay Chains and Parachains. It looks similar at first to Cosmos, but it's fundamentally different. Relay Chain is a single settlement layer. Relay Chain Validators also validate all Parachains as well. Parachains don't have the same freedom as Cosmos chains have, in terms of their own architecture, Parachains should have and fit in the same architecture. As Relay Chain validators have to validate that parachain. So with this design you have a unified security infrastructure, where all chains have same security and all cross-chain messages are validated by Relay Chain Validator. With Polkadot, you don't think about this when you launch a parachain, everything is handled by Relay Chain Validators, they validate all the messages in the 'core chain' and send/read messages through the same settlement layer.
 Ethereum Layer 2
 After this few years went by without any new innovation around interopability. Ethereum and Solana doesn't need one, Polkadot and Coosmos introduced interop inside their soveregnities, you could trade your ETH to SOL, or to BTC in CEXes. All was good until Ethereum L2s very introduced and go adoption, it was 2019 Loopring, 2021 Arbitrum and Optimism. Since then dozen of interop protocol emerged, we will walk trough each of them, what was their ideology, how they aproach the problem and ofcourse will test and run them.
 The catalyst of the interop solutions was driver by design of Arbitrum and Optimism network. First they seen a trmanadeous growth, but they design introduced a big limitaiton (incconvience) - you could send your funds to Arbitrum trustleslly in few minutes, but you had no ability to withdraw them instantly, you would send a withdrawal transaction, lock your funds for 7 days and after that time you could only claim your fund back in Ethereum. This was a massive problem and huge opportunity for the ones, who could deeploy big liqudity freeze the assets for 7 days, but give users funds instantly but a same time charge them a fee. This had a big economic incentive for creating an interop protocol and the first ones started emerging.
 
-### What is the CORE Problem of Interop?
+## What is the CORE Problem of Interop?
 
 As you can see from Bitcoin and Litecoin example as well ass Cosmos and Polkadot designs, the core driver for interop solutions is solving the scalability issue and the core problem with that solutions is, who verifies what. To just get to the bottom of interop its as simple as sending assets from one wallet to another wallet. But in different networks. So what is the question you ask about blockchain, when you are considering holding/buying/using their infra, what is the consensus of that that blockchain, how many validators, how many miners and etc. Once you are confident you use the wallet and you do the transfers. With cross-chain transfers, now you have 2 same questions. You are operating in 2 different security zones, for example for Bitcoin and Ethereum those zones are similar but for long-tail chain or app chain versus Bitcoin the security zones are different. So this is the thing you should consider. And in top of that you should ask the question, about actual transportation layer, what handles that cross-chain transfer, what is the consensus. Let's say for Bitcoin to Ethereum transfers, the security of that transfer should at least be in a same security level as Bitcoin and Ethereum transfers right? Apparently thats not true. And there is a lot there, it means that in order to do Bitcoin to Ethereum tranfer, you are passing through a 3rd zone, which has its own security attributes. Who are verifing the transactions, who are signign the transactions, what happens if.... Thats why its a way complicated topic, there are way too much solutions trying to solve this exact problem, what is the exact transportation mechanism? Who is goverining this process? Because of the single chain we have the answers, we know miners, we know validators how they workd and etc, but the same question should be asked for an interop solution as they effectivly act cross-chain ledger kind of. Who is governing the cross-chain transaction process? The question that raised billions of dollars, and sparked dozens of solutions. This post will explore the majority of them and will try to answer the same exact question from different solutions perspective. Current interop protocol do more volume than some of the actual chains. Yet the security of these protocols are underexplored. Will explore the all details end to end now.
 
-We will start exploring each solutions I recall in short time scale which project was announced first, but at that time emerged multiple solution and you could put them in to 2 categories, ones that were trying to solve the problem in a decentralized way, and ones that were solving it in a centralized way but were communicating that they are decentralized.
-Decentralized protocols, actually good ones and my faviroties were Connext and Hop. Centralized one, that was missleding users that they are decentralized was Orbiter. After few month Layerswap was introduced, it was centralized one, but had no communication around that question (not claiming that centralized nor claming that decentralized). Btw I am founder of Layerswap, so will tell you some more details around our deceision making at that time. So lets go step by step and explore each of these solution.
-
-We will be exploring each interop protocol through 4 lenses:
+We will be exploring each interop protocol through **4 lenses**:
 
 - **Participants** - Who are the participants for the single bridging transaction from one chain to another? What parties are involved for finalization of the transaction?
 - **User Flow** - How it looks like end-to-end, from user submitting a transaction to receiving funds in destination chain.
@@ -89,7 +86,7 @@ I will present a flow chart to capture the basic idea of the protocol and will n
 
 The core design idea of flowschars were inspired from Acrross Prime Blogpost. Will talk about it Across and Across Prime later in the post.
 
-#### Full list of the protocols covered in this post
+### Full list of the protocols covered in this post
 
 - [Multichain](#multichain)
 - [Wormhole](#wormhole)
@@ -398,6 +395,12 @@ This bridge design has an interesting caviat. Contrary to different validator ba
 | **Security**     | Swap = pure HTLC atomicity—either both chains release with the same secret or both refund, so no custody risk. SEED staking + slashing penalizes mis-fills. |
 | **Extendability**| Supports Bitcoin L1 plus many EVM L1/L2s; adding a chain is just deploying the standard vault contracts and pointing solvers/relayers at it—every new chain immediately interoperates with all others, and all roles remain permissionless. |
 
+--
+
+As we get here, to quick recap is that interop is at really early early stages. All the solutions come with gigantic tradeoffs, ofen the ones that are ont easly spotabble at surface, some of them are intentionally misleading, some of them have actually a good path forward, that can benefit the whole crypto ecosystems. Whatever it is, but we are right now in big expereimental stage, where we will se what kind of projects can start striving. I almost think that whatever it was possible to try and explore, has been done, the question is how the existing solutions and how the crypto ecosystem will grow generally.
+
+And also if you think we are done with this, blog post, not actually. There are few more ideas to explore, like Resource Locks, Shhared bridgtes and few ecosystem updates now. So let move with that.
+
 #### Resource Locks
 
 #### Shared Bridges
@@ -407,10 +410,15 @@ This bridge design has an interesting caviat. Contrary to different validator ba
 https://www.bungee.exchange/litepaper.pdf
 Intents vs Messaging
 This is a bullshit question, and bullshit debate. There was never this question, it was just made a mainstream by few influental founders to keep people busy. This has not technological explanation, like almost any Intent based bridge in some ways uses a cross-chain messaging. It's not a debate at all. I think the better question to explore is Intents VS Pools, a more better way to say is Active LPs VS Passive LPs. Probably will have some follow up posts about this later.
-Hyperlane vs LayerZero
-New Ideas, Initiatives
-I tried to introduce all the possible solutions that are there now, including the ones that are already winded down, but I bealvie this gives a glimpse was this space looks like and how important is interop solutions. In this section I will go over briefly with new ideas and initiatives that are emerging now and are worth exploring. 
-Open Intents Protocol
+
+#### Hyperlane vs LayerZero
+
+
+### New Ideas, Initiatives
+I tried to introduce all the possible solutions that are there now, including the ones that are already winded down, but I bealvie this gives a glimpse was this space looks like and how important is interop solutions. In this section I will go over briefly with new ideas and initiatives that are emerging now and are worth exploring.
+
+#### Open Intents Protocol
+
 The Open Intents Framework is a modular, open-source framework for building and deploying intent product experiences. Instead of building intents infrastructure from scratch, developers can leverage a suite of modular abstractions - including a solver and composable smart contracts - to customize and deploy intent-based protocols with ease.
 This is an initiative coming from a motivatiation and premis to modualizrie intent protocol componetns. Like messaging, running Solver and etc. I actually respect this initative, but Stundartigizing Solver looks like a non-standartzible thing. Solvers are fundamentally different, they have bunch of integrations with CEXes, other bridges, swap protocols, they have bunch of admin panels, tools for monitoring and etc, becasue of unstable cross-chain infrasturcture including RPC outages, architectural differences beetwin blockchains and etc, they have sophisticated transaction processing systems. All of this way complicated, way custom, that this is really hard to standartize. The solver that uses an atomic swap protocol, works different that one uses x-chain messaging, and that one is different from Solvers like in deBridge protocol. There are too many differences to get an usefull standard. Existing solvers will need some kind of incentive to move to this standard, this standard should generate a bigger orderflow somehow (lets say if this got implemented with wallets), or the standart should solve a good problem for them. I don't see either of these happing soon.
 Across Prime
