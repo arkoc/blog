@@ -1,0 +1,8 @@
++++
+date = '2025-05-30T11:56:55+03:00'
+draft = true
+title = 'Private crosschain bridging'
++++
+
+With public announcement of the first Privacy-preserving L2 Aztec, the cross-chain ecosystem becomes much more interesting. If you can build a cross-chain bridge - a private one, from any N chain to Aztec, and from Aztec to any M chain, it will mean that you can basically have a private cross-chain bridging from N to M chains. Pretty exciting. And the TRAIN's design perfectly fits this idea. Combaning the Atomic Swaps with Multi-hop Transaction, TRAIN can enable this seemslesly fomr a single UI/UX.
+Let's explore it a bit more. So TRAIN protocol allows two parties (user, solver) to trustless exchange assets in 2 chains. Also this can be chained together, to go to chains that do not have direct connection (e.g. single solver). TRAIN now is being built to support Aztec. To basically do a private cross-chain bridge to Aztec. So you can privately bridge to Aztec from Arbitrum, or from Solana. Thats already interesting, but if you have 2 solvers supporting Aztec, this can also allow you to do a cross-chain bridge from Arbitrum to Solana, in the middle using Aztec, so first solver will solve Arbitrum to Aztec, second solver will solve Aztec to Solana. There is a bit still technical challange because TRAIN for multihop transactions uses the same HASHLOCK so ARbitrum and Solana locks will share that and it will be easly linked and we are trying to solve it.

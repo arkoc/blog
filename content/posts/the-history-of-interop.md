@@ -38,9 +38,9 @@ In 2013, on May 2nd at 10:35 AM, a guy named Tier Nolan hit the submit button on
 
 Let's say Bob has 1 BTC and Alice has 10 LTC, and they want to exchange assets.
 
-1. Bob generates some random data—a secret—and calculates HASH(S)
+1. Bob generates some random data — a secret — and calculates `HASH(secret)`
 2. He then creates a Bitcoin P2SH transaction with a script that allows spending that UTXO if the secret is provided (it compares with the hash, as Bitcoin scripting lets you calculate the hash), or, if a specified timelock expires, Bob can spend this UTXO to get his funds back.
-3. Alice sees this transaction in Bitcoin, showing that Bob is willing to do an exchange with her. She copies HASH(S) from Bob's step 2 transaction and creates a transaction in the Litecoin network under the same condition, except now if the secret is provided, funds will go to Bob.
+3. Alice sees this transaction in Bitcoin, showing that Bob is willing to do an exchange with her. She copies `HASH(secret)` from Bob's step 2 transaction and creates a transaction in the Litecoin network under the same condition, except now if the secret is provided, funds will go to Bob.
 4. Once Bob observes this, he reveals the secret by making a public transaction to spend that UTXO in Litecoin.
 5. As the secret becomes public, Alice uses this secret and spends the UTXO in the Bitcoin network.
   
@@ -60,7 +60,7 @@ Let's fast forward one year to 2016, when the great and almighty Vitalik Buterin
 In Bitcoin, that information was limited to UTXOs and some basic scripting. What if, instead of that basic scripting, we could have a fully functional programming language? And so, Solidity and Ethereum were born. With this innovation, Ethereum created a situation where new tokens could be easily generated within Ethereum itself (ERC20s). Interoperability and Atomic Swaps were pushed to the back burner and were no longer seen as important solutions, as you could create as many tokens as possible in Ethereum — in the same chain — and then use protocols like Uniswap to exchange them within Ethereum without any interoperability issues.
 
 Additionally, centralized exchanges (CEXes) were on the rise, so if someone needed to exchange BTC for ETH, they could still do it through CEXes. In the same way, you could deposit BTC to a CEX, trade it for USDT, then for ETH, and withdraw it back.
-After a few years of tremendous success with Ethereum, it became evident that Ethereum needed to be scaled again. One chain was not enough; during peak times, the blockchain was getting congested and fees were skyrocketing. For a few folks in the space, including the co-founder of Ethereum (Gavin Wood), it became clear that one chain to rule them all was not going to work. So two independent projects were built around the same time: Polkadot and Cosmos. Both had a vision to enable the launching of new chains—presumably, each chain would be specialized for a specific application or use case. 
+After a few years of tremendous success with Ethereum, it became evident that Ethereum needed to be scaled again. One chain was not enough; during peak times, the blockchain was getting congested and fees were skyrocketing. For a few folks in the space, including the co-founder of Ethereum (Gavin Wood), it became clear that one chain to rule them all was not going to work. So two independent projects were built around the same time: Polkadot and Cosmos. Both had a vision to enable the launching of new chains—presumably, each chain would be specialized for a specific application or use case.
 
 ## Cosmos
 
@@ -76,7 +76,7 @@ The catalyst for these interoperability solutions was driven by the design of th
 
 ## What is the CORE Problem of Interop?
 
-As you can see from the Bitcoin and Litecoin examples, as well as the Cosmos and Polkadot designs, the core driver for interoperability solutions is solving the scalability issue, and the core problem with those solutions is: **who verifies what**? 
+As you can see from the Bitcoin and Litecoin examples, as well as the Cosmos and Polkadot designs, the core driver for interoperability solutions is solving the scalability issue, and the core problem with those solutions is: **who verifies what?**
 
 To just get to the bottom of interoperability, it's as simple as sending assets from one wallet to another wallet, but across different networks. So what is the question you ask about a blockchain when you are considering holding, buying, or using their infrastructure? What is the consensus mechanism of that blockchain? How many validators, how many miners, etc.? Once you are confident, you use the wallet and you do the transfers. With cross-chain transfers, now you have two sets of the same questions. You are operating in two different security zones. For example, for Bitcoin and Ethereum, those zones are similar, but for a long-tail chain or app chain versus Bitcoin, the security zones are different. So this is something you should consider. On top of that, you should ask about the actual transportation layer: what handles that cross-chain transfer, and what is the consensus? Let's say for Bitcoin to Ethereum transfers, the security of that transfer should at least be at the same security level as Bitcoin and Ethereum transfers, right? Apparently, that's not true. And there is a lot to unpack here. It means that in order to do a Bitcoin to Ethereum transfer, you are passing through a third zone, which has its own security attributes. Who is verifying the transactions, who is signing the them, what happens if... That's why it's a complicated topic. There are way too many solutions trying to solve this exact problem: what is the exact transportation mechanism? Who is governing this process? Because of the single chain, we have the answers. We know how miners work, how validators work, etc. But the same questions should be asked for an interoperability solution, as they **effectively act as a cross-chain ledger**. Who is governing the cross-chain transaction process? This question has raised billions of dollars and sparked dozens of solutions. This post will explore the majority of them and will try to answer the same exact question from different solutions' perspectives.
 
@@ -104,16 +104,17 @@ I will present a flow chart to capture the basic idea of the protocol and will n
 - [Multichain](#multichain) - A 21-node SMPC network that mints and burns wrapped tokens held in threshold-controlled vaults across chains.
 - [Wormhole](#wormhole) - A 19-guardian validator network that signs verifiable action approvals (VAAs) to relay assets and messages between chains.
 - [Axelar](#axelar) - Cosmos-based PoS network whose validator set co-signs gateway contracts for programmable cross-chain messaging and token transfers.
-- [HOP](#hop) - Rollup-centric bridge where bonders front hToken liquidity, AMMs swap to native assets, and the canonical bridges provide settlement
-- [Connext V2 Protocol](#connext-v2) - A liquidity-network bridge that uses hashed-timelock atomic swaps and permissionless routers for fast, trust-minimized transfers across chains
-- [Across](#across) - An optimistic bridge where relayers front funds instantly and UMA’s oracle later settles
-- [deBridge](#debridge) - A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim
-- [ChainFlip](#chainflip) - A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping
-- [Stargate](#stargate) - A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens
-- [Everclear](#everclear) - A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub
+- [HOP](#hop) - Rollup-centric bridge where bonders front hToken liquidity, AMMs swap to native assets, and the canonical bridges provide settlement.
+- [Connext V2 Protocol](#connext-v2) - A liquidity-network bridge that uses hashed-timelock atomic swaps and permissionless routers for fast, trust-minimized transfers across chains.
+- [Across](#across) - An optimistic bridge where relayers front funds instantly and UMA’s oracle later settles.
+- [deBridge](#debridge) - A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
+- [ChainFlip](#chainflip) - A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping.
+- [Stargate](#stargate) - A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens.
+- [Everclear](#everclear) - A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
 - [Meson](#meson) - An atomic-Swap HTLC network allowing LPs to match stable-coin transfers between any chains with no validators and 3rd parties
-- [Centralized Bridges (Layerswap, Relay, Orbiter)](#centralized-bridges) - A single trusted party (the solver) receives user funds on the source chain and transfers equivalent assets from its own inventory on the destination chain
-- [TRAIN Protocol](#train) - A permissionless cross-chain swaps protocol that uses atomic Pre-HTLC escrows and competitive solver auctions to enable trustless (trust-minimized) asset swaps between chains
+- [Centralized Bridges (Layerswap, Relay, Orbiter)](#centralized-bridges) - A single trusted party (the solver) receives user funds on the source chain and transfers equivalent assets from its own inventory on the destination chain.
+- [CCTP](#cctp) - Circle’s burn-and-mint bridge that lets native USDC move across chains by burning on the source chain and minting on the destination.
+- [TRAIN Protocol](#train) - A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless (trust-minimized) asset swaps between chains
 - [LayerZero](#layerzero) - Modular messaging layer that uses configurable decentralized verifier networks plus executors to deliver payloads.
 - [Hyperlane](#hyperlane) - “Choose-your-own-security” mailboxes where each app picks its interchain security module—multisig, staking, ZK, or custom—for permissionless messaging.
 - [Synapse](#synapse) - Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
@@ -297,16 +298,30 @@ I use this bridge really rarely, but I thought it's good to mention them as they
 
 Oh boy. These players are kind of disruptive in this space. As with a centralized design you can is WAY easier to operate solver, way easier.
 
+### CCTP
+
+Circle’s burn-and-mint bridge that lets native USDC move across chains by burning on the source chain and minting on the destination
+
+![Centralized bridges overview](/img/interop/cctp.jpg)
+
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; Off-chain Circle *Attestation Service* (Iris); any *Relayer* for transmiting signatures |
+| **Flow**    | User calls depositForBurn() on the source-chain TokenMessenger, burning native USDC and emitting a message ID → Iris detects the burn once the block meets the chosen finality threshold (hard-finality for Standard transfers, soft-finality for Fast transfers in CCTP V2) and returns a signed attestation. → Any relayer submits the attestation to the destination chain’s MessageTransmitter via receiveMessageWithAttestation(), which verifies the signatures and mints the same amount of native USDC to the recipient.|
+| **Security**     | No on-chain security guarantees beyond the service’s honesty and solvency – this is effectively a custodial transfer. |
+| **Extendability**| (i) Adding a new chain requires (i) Circle issuing native USDC there, (ii) deploying the two contracts, and (iii) Iris starting to watch that chain—so expansion is fast but centrally coordinated by Circle. |
+
 ### [TRAIN](#train)
 
-A permissionless cross-chain swaps protocol that uses atomic Pre-HTLC escrows and competitive solver auctions to enable trustless asset swaps between chains
+A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless asset swaps between chains
 
 ![TRAIN protocol overview](/img/interop/train.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
 | **Participants** | User; *Solvers* (liquidity providers) listed in the on-chain Discovery registry |
-| **Flow**    | The user initiates a cross-chain swap by submitting an intent to the TRAIN contract on the source chain, which locks their funds in a Pre-HTLC escrow. This intent is broadcast and picked up by solvers, who compete to fulfill it via an off-chain auction or algorithm. The selected solver locks equivalent funds on the destination chain. Once both escrows are active, the user transmits the hash of the destination lock to the source chain contract to confirm readiness. The solver then reveals the secret to release the escrowed funds on the destination chain, and claim their funds in the source chain. If either party fails to proceed, both sides can reclaim their funds after the timeout. |
+| **Flow**    | The user initiates a cross-chain swap by submitting an intent to the TRAIN contract on the source chain, which locks their funds in a PreHTLC escrow. This intent is broadcast and picked up by solvers, who compete to fulfill it via an off-chain auction or algorithm. The selected solver locks equivalent funds on the destination chain. Once both escrows are active, the user transmits the hash of the destination lock to the source chain contract to confirm readiness. The solver then reveals the secret to release the escrowed funds on the destination chain, and claim their funds in the source chain. If either party fails to proceed, both sides can reclaim their funds after the timeout. |
 | **Security**     | TRAIN is built on pure atomic swap mechanics using HTLCs: either both parties fulfill the swap or both get refunded, eliminating unilateral risk. |
 | **Extendability**| Deploying TRAIN on a new chain automatically connects it to all other TRAIN-supported networks, because intents can be created on that chain and any solver can fulfill them by locking on another chain. There’s no centralized setup per chain – solvers self-register permissionlessly via the on-chain Discovery, and any chain’s contract simply uses the same standardized HTLC interface. This means the system scales completely permissionlessly: if a chain (EVM or non-EVM) supports hashlocks and timelocks, it can be added by deploying the standard contracts, and solvers will start servicing it as soon as there’s demand |
 
@@ -421,36 +436,3 @@ Intent-based HTLC network where staked solvers compete to fill swaps and face sl
 --
 
 As we get here, to quick recap is that interop is at really early early stages. All the solutions come with gigantic tradeoffs, often the ones that are not easily spotabble at surface, some of them are intentionally misleading, some of them have actually a good path forward, that can benefit the whole crypto ecosystems. Whatever it is, but we are right now in big experimental stage, where we will se what kind of projects can start striving. I almost think that whatever it was possible to try and explore, has been done, the question is how the existing solutions and how the crypto ecosystem will grow generally.
-
-And also if you think we are done with this, blog post, not actually. There are few more ideas to explore, like Resource Locks, Shhared bridgtes and few ecosystem updates now. So let move with that.
-
-#### Resource Locks
-
-#### Shared Bridges
-
-#### Aggregators
-
-https://www.bungee.exchange/litepaper.pdf
-Intents vs Messaging
-This is a bullshit question, and bullshit debate. There was never this question, it was just made a mainstream by few influental founders to keep people busy. This has not technological explanation, like almost any Intent based bridge in some ways uses a cross-chain messaging. It's not a debate at all. I think the better question to explore is Intents VS Pools, a more better way to say is Active LPs VS Passive LPs. Probably will have some follow up posts about this later.
-
-#### Hyperlane vs LayerZero
-
-### New Ideas, Initiatives
-
-I tried to introduce all the possible solutions that are there now, including the ones that are already winded down, but I bealvie this gives a glimpse was this space looks like and how important is interop solutions. In this section I will go over briefly with new ideas and initiatives that are emerging now and are worth exploring.
-
-#### Open Intents Protocol
-
-The Open Intents Framework is a modular, open-source framework for building and deploying intent product experiences. Instead of building intents infrastructure from scratch, developers can leverage a suite of modular abstractions - including a solver and composable smart contracts - to customize and deploy intent-based protocols with ease.
-This is an initiative coming from a motivatiation and premis to modualizrie intent protocol componetns. Like messaging, running Solver and etc. I actually respect this initative, but Stundartigizing Solver looks like a non-standartzible thing. Solvers are fundamentally different, they have bunch of integrations with CEXes, other bridges, swap protocols, they have bunch of admin panels, tools for monitoring and etc, becasue of unstable cross-chain infrasturcture including RPC outages, architectural differences beetwin blockchains and etc, they have sophisticated transaction processing systems. All of this way complicated, way custom, that this is really hard to standartize. The solver that uses an atomic swap protocol, works different that one uses x-chain messaging, and that one is different from Solvers like in deBridge protocol. There are too many differences to get an usefull standard. Existing solvers will need some kind of incentive to move to this standard, this standard should generate a bigger orderflow somehow (lets say if this got implemented with wallets), or the standart should solve a good problem for them. I don't see either of these happing soon.
-Across Prime
-
-### Li.Fi x Catalyst
-
-Li.Fi acquiring Catalyst - basically as far as I can tell asquhiring - is the most badass move I seen in this space. Why is that? So listen, the big portion of the cross-chain volume is already going through Jumper. They managed to both attract users as well as wallets (in startup terms B2C and B2B). Now they have the biggest order-flow for cross-chain in single place. And what is the next trhing to do? They route all this orderflow to different solvers and protocols and those capture the value from those transactions. Now Li.Fi wants to capture that value for themselves. If they add their own solver/protocol system, they can eventually route all the order flow to their solver and capture that value instead of leaving it underlying solver/protocols. Smartass, badass move. I am not sure how this will play out. I have few ideas that would want to share here for them, is that I think the aggregator type of integration for example in wallet, when the integrated bridges has a very wide range of security details, being from centralized to semi-decentralized or ones that fake decentralized, this should be probably an option for integrators (I dont know if they have or not have this feature) so they can select a security level. The other option that I would really like to see in Li.Fi which is super difficult to implement technically, to have a permissionless integraiton of the bridges. Additionally its very easy to 'trick' the aggregator, I can just add a centralized bridge to it and majority of alll the order flow will go trhough it, and users has no assurance from security persepective or any other information shown in UI, its only the fee and speed. Paying with VISA is faster than any blockchain, cheaper than any blockahin, why we are building crypto?
-
-### TRAIN x Aztec
-
-With public announcement of the first Privacy-preserving L2 Aztec, the cross-chain ecosystem becomes much more interesting. If you can build a cross-chain bridge - a private one, from any N chain to Aztec, and from Aztec to any M chain, it will mean that you can basically have a private cross-chain bridging from N to M chains. Pretty exciting. And the TRAIN's design perfectly fits this idea. Combaning the Atomic Swaps with Multi-hop Transaction, TRAIN can enable this seemslesly fomr a single UI/UX.
-Let's explore it a bit more. So TRAIN protocol allows two parties (user, solver) to trustless exchange assets in 2 chains. Also this can be chained together, to go to chains that do not have direct connection (e.g. single solver). TRAIN now is being built to support Aztec. To basically do a private cross-chain bridge to Aztec. So you can privately bridge to Aztec from Arbitrum, or from Solana. Thats already interesting, but if you have 2 solvers supporting Aztec, this can also allow you to do a cross-chain bridge from Arbitrum to Solana, in the middle using Aztec, so first solver will solve Arbitrum to Aztec, second solver will solve Aztec to Solana. There is a bit still technical challange because TRAIN for multihop transactions uses the same HASHLOCK so ARbitrum and Solana locks will share that and it will be easly linked and we are trying to solve it.
