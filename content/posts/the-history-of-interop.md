@@ -394,6 +394,8 @@ Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and rele
 
 Light client proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain.
 
+![Hyperbridge protocol overview](/img/interop/hyperbridge.jpg)
+
 | Aspect           | Description |
 |------------------|-------------|
 | **Participants** | *User*; the *Hyperbridge* parachain (running in Polkadot) which serves as an aggregation and verification hub; permissionless Relayers (called Tesseract relayers) who fetch proofs from the parachain and submit them to destination chains. |
