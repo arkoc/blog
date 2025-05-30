@@ -405,7 +405,9 @@ This bridge design has an interesting caveat. Contrary to different validator-ba
 
 ### [Garden Finance](garden-finance)
 
- Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
+Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
+
+![Garden protocol overview](/img/interop/garden.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
