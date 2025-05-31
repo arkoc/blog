@@ -1,7 +1,7 @@
 +++
 date = '2025-05-24T11:56:55+03:00'
 draft = false
-title = 'The brief history of crypto interop'
+title = 'The brief history of crypto interop (WIP)'
 +++
 
 The blockchain ecosystem began with a single, isolated network—Bitcoin. As more chains emerged, the need for interoperability—the ability for different blockchains to communicate and exchange value—became clear. This post takes you through the pivotal moments in the history of crypto interoperability.
