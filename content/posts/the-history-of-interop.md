@@ -287,7 +287,7 @@ I use this bridge really rarely, but I thought it's good to mention them as they
 
  A single trusted party (the solver) receives user funds on the source chain and transfers equivalent assets from its own inventory on the destination chain
 
-![Centralized bridges overview](/img/interop/layerswap.jpg)
+![Centralized bridges overview](/img/interop/centralized.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
@@ -396,7 +396,7 @@ Chainlink’s cross-chain protocol that moves tokens and messages via dual oracl
 
 Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
 
-![1inch Fusion+ protocol overview](/img/interop/ccip.jpg)
+![1inch Fusion+ protocol overview](/img/interop/1inch.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
