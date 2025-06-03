@@ -10,11 +10,7 @@ This post is technical, diving deep into each solution that emerged over time an
 
 ## Bitcoin
 
-Let's step back and remember how it all started and how this problem was created. It began with Bitcoin. Once Bitcoin was live, for the first time in human history, we had a digital, non-replicable piece of information. I like to phrase it this way because we had digital money long before Bitcoin, and we still have it now in online banking systems; in fact, most money is digital anyway. The innovation of Bitcoin was that you now had a piece of information — a bunch of 1s and 0s — that could not simply be copy-pasted. Before Bitcoin, you (or someone else) could just replicate all the 1s and 0s and end up with the same original data, with no difference between the original and the copy. And then, Bitcoin was born, as an implementation of digital currency.
-
-Anyway, this is not a post about Bitcoin. Fast-forward to October 2011: Bitcoin saw tremendous growth. In June 2011, it reached a $200M market cap (then quickly dropped to $30M, just to remind you what this space looked like). Block production became much more expensive than when it started. In 2010, just two leading zeros were necessary for mining.
-
-A quick info: mining is the process where miners combine the block with some random data and calculate a HASH function on top of that information. Mining difficulty was determined by how many zeros should be included in the hash for it to be accepted. For this, miners have a `NONCE` field that they can manipulate with the original block data to produce a hash with the required zeros. It's almost impossible to guess, so miners use brute force; the more zeros required in the hash, the more exponentially (or by some other function) difficult mining becomes. So, back to 2011: mining complexity increased from 1-2 to 5-6 zeros. For the curious, now it's 20.
+Let's step back and remember how it all started and how this problem was created. It began with Bitcoin. Once Bitcoin was live, for the first time in human history, we had a digital, non-replicable piece of information. Fast-forward to October 2011: Bitcoin saw tremendous growth. In June 2011, it reached a $200M market cap (then quickly dropped to $30M, just to remind you what this space looked like). Block production became much more expensive than when it started. In 2010, just two leading zeros were necessary for mining, in 2011 it skyreocketed to 5-6 zeros. For the curious, now it's 20.
 
 ## Litecoin
 
@@ -104,25 +100,25 @@ I will present a flow chart to capture the basic idea of the protocol and will n
 - [Multichain](#multichain) - A 21-node SMPC network that mints and burns wrapped tokens held in threshold-controlled vaults across chains.
 - [Wormhole](#wormhole) - A 19-guardian validator network that signs verifiable action approvals (VAAs) to relay assets and messages between chains.
 - [Axelar](#axelar) - Cosmos-based PoS network whose validator set co-signs gateway contracts for programmable cross-chain messaging and token transfers.
+- [deBridge](#debridge) - A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
+- [ChainFlip](#chainflip) - A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping.
+- [THORChain](#thorchain) - Bonded node network with TSS Asgard vaults and a RUNE-paired AMM that swaps native L1 assets directly.
+- [CCIP](#ccip) - Chainlink’s cross-chain protocol that moves tokens and messages via dual oracle networks and an independent risk-management guard
+- [Hyperbridge](#hyperbridge) - Light client proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain
+- [Stargate](#stargate) - A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens.
+- [Everclear](#everclear) - A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
 - [HOP](#hop) - Rollup-centric bridge where bonders front hToken liquidity, AMMs swap to native assets, and the canonical bridges provide settlement.
 - [Connext V2 Protocol](#connext-v2) - A liquidity-network bridge that uses hashed-timelock atomic swaps and permissionless routers for fast, trust-minimized transfers across chains.
 - [Across](#across) - An optimistic bridge where relayers front funds instantly and UMA’s oracle later settles.
-- [deBridge](#debridge) - A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
-- [ChainFlip](#chainflip) - A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping.
-- [Stargate](#stargate) - A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens.
-- [Everclear](#everclear) - A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
+- [Synapse](#synapse) - Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
 - [Meson](#meson) - An atomic-Swap HTLC network allowing LPs to match stable-coin transfers between any chains with no validators and 3rd parties
+- [1inch Fusion+](#1inch-fusion) - Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
+- [Garden Finance](#garden-finance) - Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
+- [TRAIN Protocol](#train) - A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless (trust-minimized) asset swaps between chains
 - [Centralized Bridges (Layerswap, Relay, Orbiter)](#centralized-bridges) - A single trusted party (the solver) receives user funds on the source chain and transfers equivalent assets from its own inventory on the destination chain.
 - [CCTP](#cctp) - Circle’s burn-and-mint bridge that lets native USDC move across chains by burning on the source chain and minting on the destination.
-- [TRAIN Protocol](#train) - A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless (trust-minimized) asset swaps between chains
 - [LayerZero](#layerzero) - Modular messaging layer that uses configurable decentralized verifier networks plus executors to deliver payloads.
 - [Hyperlane](#hyperlane) - “Choose-your-own-security” mailboxes where each app picks its interchain security module—multisig, staking, ZK, or custom—for permissionless messaging.
-- [Synapse](#synapse) - Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
-- [THORChain](#thorchain) - Bonded node network with TSS Asgard vaults and a RUNE-paired AMM that swaps native L1 assets directly.
-- [CCIP](#ccip) - Chainlink’s cross-chain protocol that moves tokens and messages via dual oracle networks and an independent risk-management guard
-- [1inch Fusion+](#1inch-fusion) - Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
-- [Hyperbridge](#hyperbridge) - Light client proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain
-- [Garden Finance](#garden-finance) - Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
 
 ### [Multichain](#multichain)
 
@@ -171,6 +167,101 @@ Cosmos-based PoS network whose validator set co-signs gateway contracts for prog
 
 With this design, as with Wormhole, adding a new chain is a big problem because all of your existing validators should run a light client for the new chain. So with each chain added to Axelar, every Axelar node operator becomes harder and more resource-expensive to run. Axelar actually addresses this problem with the Axelar Amplifier network, where you can add a network that core validators don't need to verify. You add a network with its own verifiers. But I am not quite sure how the security of the messages coming from verifiers is adapted and matched with messages that are verified with 'core' validators.
 
+### [deBridge](#debridge)
+
+A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
+
+![deBridge protocol overview](/img/interop/across.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*, a *staked Validator network* where a ≥2/3 majority must sign each message; open *Claimer* submit the validator signatures to the destination chain |
+| **Flow**    | User invokes a transfer or message via the deBridgeGate contract on the source chain (e.g. calling send()) → this emits a Submission event  → all deBridge validators observe the event; once the source transaction is final, they each sign a cryptographic attestation for it → these signatures (or a threshold aggregate) are stored on a decentralized layer (e.g. Arweave) → a Claimer then retrieves the signature bundle and submits it to the deBridgeGate on the destination chain → the contract verifies the threshold signatures and, if valid, releases the bridged assets or executes the cross-chain call for the user.  |
+| **Security**     | The destination action requires a valid TSS multi-signature from the deBridge validator set – if fewer than the threshold (e.g. 2/3) sign, the claim is rejected. Validators are all staked, so any malicious signing can be slashed by governance.  |
+| **Extendability**| deBridge is chain-agnostic. To support a new chain, the deBridgeGate contracts are deployed there and that chain’s ID is added to the validator node software configuration. Validators must run full or light nodes for each supported chain, but adding chains is routine as long as they can parse finality and signatures |
+
+### [ChainFlip](#chainflip)
+
+A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping.
+
+![ChainFlip protocol overview](/img/interop/chainflip.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; 150 FLIP-staked *Validators* run Substrate State-Chain; AMM *Liquidity Providers*  who fund pools on the state chain |
+| **Flow**    | User specifies a direct swap (e.g. BTC → ETH) and deposits the input asset into ChainFlip’s Vault address on the source chain → the validators (nodes) monitoring that Vault see the deposit (once it reaches finality on the source chain) and record this event and swap details on the State Chain (which acts as an order book and pricing engine) → within the State Chain’s AMM, the trade is matched – the protocol determines the output amount using its cross-chain AMM pools → the validators collectively TSS-sign a transaction from the destination chain’s Vault to the user’s address, paying out the desired asset on the destination chain |
+| **Security**     | All user funds sit in on-chain Vaults controlled by the validator network’s threshold keys. No single validator can move funds; a supermajority (e.g. 2/3) must cooperate to sign any outbound transfer.Validators are required to put up a large FLIP token bond, which can be slashed for misbehavior, making attacks economically unattractive. The system relies on its own consensus (Substrate/Tendermint) to coordinate swaps, and validators must run full nodes on every connected chain to independently verify deposits and block finality before signing outputs. |
+| **Extendability**| ChainFlip supports both EVM chains and non-EVM chains (Bitcoin, Solana, Polkadot, etc.) by implementing Vault “adapters” for each. To add a new chain, validators need to run a node for that chain and a vault address is generated for it. |
+
+### [THORChain](#thorchain)
+
+Bonded node network with TSS Asgard vaults and a RUNE-paired AMM that swaps native L1 assets directly.
+
+![THOR protocol overview](/img/interop/thor.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; ~100 *Validator Nodes* running a Cosmos-SDK chain; they collectively control Asgard TSS vaults; external *Liquidity Providers* fund RUNE-paired pools. |
+| **Flow**    | The user sends a native asset to THORChain’s vault address with a memo indicating the desired swap → THORChain nodes (called THORNodes) monitoring that address see the incoming deposit once it reaches sufficient confirmations → When a supermajority of nodes observes the deposit, they assign it to a swap transaction in THORChain’s internal ledger and determine the output via THORChain’s AMM pricing (all swaps go through RUNE pools, so BTC -> ETH swap is executed as BTC->RUNE->ETH using pool prices) → the network then prepares an outbound transaction: the nodes collectively generate a signature (using a GG20 threshold scheme) to spend from the relevant outbound vault (e.g. the Asgard vault on Ethereum) to the user’s target address. |
+| **Security**     | THORChain’s security relies on a large bonded validator set and threshold cryptography. The vaults (called Asgard vaults) are controlled by a 2/3 threshold signature – for instance, if there are 100 nodes, any 67 can sign to move funds. No single node has the private key; it’s collectively generated and stored in pieces by the nodes. |
+| **Extendability**| New L1 chains can be added via governance. To integrate a chain, THORChain requires implementing a Bifrost client module for that chain’s API and having all validator nodes run a full node for it. |
+
+### [CCIP](#ccip)
+
+Chainlink’s cross-chain protocol that moves tokens and messages via dual oracle networks and an independent risk-management guard.
+
+![THOR protocol overview](/img/interop/ccip.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; staked *Committing DON* (Chainlink oracle nodes that sign every cross-chain message), independent *Risk-Management DON* that re-verifies each commit; any *Executor* submits the attested payload and pays gas on the destination chain. |
+| **Flow**    | The user calls `ccipSend` on the Router contract of the source chain, providing either tokens or an arbitrary payload for messaging → The Committing DON (Decentralized Oracle Network) monitoring that Router sees the event → Once finality is assured on the source chain, the DON reaches consensus on the message details and writes a cryptographic attestation to a special contract on the destination chain called the “Commit store”. Simultaneously, the Risk Management DON is monitoring all transfers → if the transfer exceeds certain preset limits (volume, rate, destination, etc.), the Risk DON can trigger a hold or “circuit break” on the transfer before it completes → once the required number of oracle signatures from the Committing DON are posted on the destination an Executor (which could be one of the DON’s nodes or any user) calls `ccipReceive` on the destination Router. |
+| **Security**     | CCIP employs what Chainlink calls “Level-5” security, the highest level of cross-chain security classification. This means multiple independent safeguards: (1) The primary DON (Committing DON) is decentralized and economically secured by staking – compromising it requires bribing or hacking a large fraction of nodes which hold significant LINK stakes (similar to Chainlink price feeds which have proven robust). The Risk Management DON runs on a separate codebase and separate infrastructure, ensuring that even if the primary DON was subverted, the risk DON could catch anomalous activity (kind of like a checks-and-balances system). This Risk DON can automatically halt transfers that look suspicious (amounts beyond set thresholds, etc.), providing an emergency brake. |
+| **Extendability**| Any chain that can host the Router contracts can integrate; Chainlink nodes just add a light-client module, so new L1s/L2s join without changes to existing networks. The v1.5 CCT (Cross-Chain Token) standard and Token Manager let issuers plug tokens into CCIP with minimal code, while dApps choose their own Executors/DON sets. |
+
+### [Hyperbridge](#hyperbridge)
+
+Light client proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain.
+
+![Hyperbridge protocol overview](/img/interop/hyperbridge.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; the *Hyperbridge* parachain (running in Polkadot) which serves as an aggregation and verification hub; permissionless Relayers (called Tesseract relayers) who fetch proofs from the parachain and submit them to destination chains. |
+| **Flow**    | The user’s contract calls the ISMP send function (e.g. dispatch) on the Dispatcher contract on the source chain, providing the payload and destination chain ID. This Dispatcher creates a commitment of the message and sends it to the Polkadot Hyperbridge parachain (this step is trustless because the parachain itself continuously reads these commitments via light clients). Concretely, each connected chain has a light client module running inside Hyperbridge that can verify that the Dispatcher emitted a given event. The Hyperbridge parachain collects all such events from all chains and includes them in its own block as an aggregated state root. Now for delivery: a relayer (Tesseract) picks up the fact that “Chain A has message X for Chain B” by querying the Hyperbridge parachain’s state. The relayer then constructs a proof that the message was included in Hyperbridge’s latest block (essentially a Merkle proof to the aggregated root, combined with proofs that the root includes the origin chain’s state). The relayer submits this proof to the ISMP Host contract on the destination chain. The Host contract knows how to verify proofs coming from Hyperbridge (it has a light client for the Polkadot Relay Chain/Hyperbridge parachain). It checks that the proof is valid and that the message was indeed committed by the source chain’s dispatcher.  If everything checks out, the Host contract then calls the target function on the destination chain (previously registered) to deliver the message (e.g. unlock tokens or call a cross-chain function). This entire flow involves no privileged relayer – if one relayer doesn’t deliver, another can – and no intermediary tokens (it can be used for both messages and token movements via proofs). |
+| **Security**     | Hyperbridge relies on cryptographic verification of consensus rather than multisigs. The Hyperbridge parachain, running under Polkadot’s shared security, is responsible for verifying the state and consensus of each connected external chain (via light-client modules for Tendermint, Ethereum, Bitcoin, etc.). This means when it includes a message from Chain A, that message has been proven to the Polkadot validators as a valid event from a finalized block of Chain A. Similarly, when the destination chain’s Host contract gets a proof, it verifies the Polkadot parachain’s consensus (using Polkadot’s GRANDPA or Beefy consensus proofs) and the state inclusion. So trust is placed in Polkadot’s validators (highly decentralized and economically secure) and the correctness of the light client implementations – not in a few bridge nodes. |
+| **Extendability**| Hyperbridge is chain-agnostic by design – to connect a new chain, one needs to implement a light client for that chain’s consensus and state proofs in the ISMP framework and deploy a Host/Dispatcher on that chain. Because Polkadot parachains have limited throughput, Hyperbridge’s design is optimized to aggregate and scale: it doesn’t require every node to track every chain, just the parachain to run clients and produce succinct proofs. Relayers are fully permissionless; anyone can run a “Tesseract” relayer and there’s an incentive model (they get fees for delivered messages, potentially enforced by the protocol) |
+
+This bridge design has an interesting caveat. Contrary to different validator-based bridging, validators/relayers of this network do not need to run a full node / light client for any supported chain. Those runners are separate permissionless parties. Validators just have to create a light client contract and wait for relayers to fill in the data. This is a nice improvement in terms of scalability, but it comes with a trade-off.
+
+### [Stargate](#stargate)
+
+A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens
+
+![Stargate protocol overview](/img/interop/stargate.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User; *LayerZero Relayer*; DVNs deliver source chain information; *Liquidity Providers* supply capital to Stargate’s pools which back the transfers on each chain |
+| **Flow**    | User calls `swap()` on the Stargate Router on the source chain, specifying a token and target chain → contract then locks or burns the user’s tokens into the local pool and emits a message to LZ → LayerZero’s Oracle (DVN) then delivers the source chain’s block header and transaction proof to the destination chain, while the Relayer submits the message payload and proof to the destination → the destination contract, upon seeing matching data from both the oracle and relayer, deducts the appropriate tokens from its local liquidity pool and credits the user with the native asset on that chain |
+| **Security**     | The cross-chain swap executes only if two independent parties (the oracle/DVN network and the relayer service) both attest to the same message. Neither alone can finalize a transfer. Thus, an attacker must compromise both the oracle(s) and relayer simultaneously to falsify a message. |
+| **Extendability**| Any chain that LayerZero supports (i.e. where a LayerZero Endpoint can be deployed) can host Stargate. Integrating a new chain means deploying the Stargate Router and Pool contracts on that chain and having an oracle feed (a light client) for that chain’s headers. Because liquidity is unified — Stargate pools on different chains are all connected — adding a chain shares liquidity with all others (no siloed pools per pair). New chains do not dilute security, because the same oracle/relayers are required to add that route. |
+
+Stargate has one of the deepest liqudities in the interop space. Works really neat and stable. They use 2 configured DVNs basically just 2 entity multisig, which I am not fun of and the technicall challange here is if they ramp up the security, lets say increase it to 4-8-12 DVNs the costs of the transaction would be skyrocketing and they will not be competetive in the market, considering that solutions like Layerswap and Relay, with a centralized (non-security) aproach are just attracting users - until something bad happens.
+
+### [Everclear](#everclear)
+
+A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
+
+![Everclear protocol overview](/img/interop/everclear.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; open *Solvers* pre-deposit liquidity and compete to fill it; a single *Clearing Hub* (Everclear’s own chain) that nets and settles intents; off-chain *Relayers & Cartographer bots* batch the queues and relay messages over Hyperlan. |
+| **Flow**    | The user generates a new Intent and submits it to the Spoke contract on the source chain, which locks the user’s funds and queues the intent → this intent is relayed to the Hub  → The Hub chain’s Everclear module continuously matches incoming intents with available solver liquidity on destination chains (netting multiple intents if possible) → A Solver with available balance on the destination chain is selected (either via an auction or first-come competition) and fills the intent by immediately paying the user on the destination from its pre-deposited liquidity (through the Spoke on destination) → A corresponding Fill message is sent back to the Hub. The Hub, upon seeing both the intent and fill, “nets” them – effectively crediting the solver’s account and marking the intent as settled  → Finally, a Settlement message is sent from the Hub to one of the Spoke contracts (whichever side needs to reconcile liquidity) to adjust the on-chain balances (e.g. transferring funds from the solver’s escrow to the user or vice versa). |
+| **Security**     | Solvers can only use funds they have prepaid into the Spoke contracts, and they receive payouts only through the Hub’s netting mechanism, so they cannot take user funds without delivering the service. Every settlement on the Hub requires matching intent and fill hashes, preventing mismatched or fraudulent fills. Cross-chain messages between Spokes and Hub are sent via Hyperlane (which itself has modular security), and if a message were tampered with or lost, the netting wouldn’t complete. Solvers are also typically required to stake a token (or be backed by stakers) and will be slashed if they fail to fulfill after claiming an intent, providing a financial guarantee. |
+| **Extendability**| To add a new chain: deploy a standard Spoke contract on that chain and set up Hyperlane message passing to the Hub. Everclear is built to be permissionless – any chain can be integrated as a Spoke without needing approval, and any party can become a solver or relayer by depositing funds and (if required) staking, so long as they abide by the protocol’s rules |
+
 ### [HOP](#hop)
 
 Rollup-centric bridge where bonders front hToken liquidity, AMMs swap to native assets, and the canonical bridges provide settlement
@@ -214,59 +305,18 @@ An optimistic bridge where relayers front funds instantly and UMA’s oracle lat
 
 Anyone can technically run a relayer, but the majority of order flow is routed to exclusive Relayers, which the team has to confirm/allow to become a relayer.
 
-### [deBridge](#debridge)
+### [Synapse](synapse)
 
-A threshold-signature messaging and asset bridge secured by a staked validator set, with signatures permissionlessly relayed for final claim.
+Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
 
-![deBridge protocol overview](/img/interop/across.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*, a *staked Validator network* where a ≥2/3 majority must sign each message; open *Claimer* submit the validator signatures to the destination chain |
-| **Flow**    | User invokes a transfer or message via the deBridgeGate contract on the source chain (e.g. calling send()) → this emits a Submission event  → all deBridge validators observe the event; once the source transaction is final, they each sign a cryptographic attestation for it → these signatures (or a threshold aggregate) are stored on a decentralized layer (e.g. Arweave) → a Claimer then retrieves the signature bundle and submits it to the deBridgeGate on the destination chain → the contract verifies the threshold signatures and, if valid, releases the bridged assets or executes the cross-chain call for the user.  |
-| **Security**     | The destination action requires a valid TSS multi-signature from the deBridge validator set – if fewer than the threshold (e.g. 2/3) sign, the claim is rejected. Validators are all staked, so any malicious signing can be slashed by governance.  |
-| **Extendability**| deBridge is chain-agnostic. To support a new chain, the deBridgeGate contracts are deployed there and that chain’s ID is added to the validator node software configuration. Validators must run full or light nodes for each supported chain, but adding chains is routine as long as they can parse finality and signatures |
-
-### [ChainFlip](#chainflip)
-
-A native-asset AMM whose Substrate state chain and FROST-TSS vaults execute direct swaps without wrapping.
-
-![ChainFlip protocol overview](/img/interop/chainflip.jpg)
+![Synapse protocol overview](/img/interop/synapse.jpg)
 
 | Aspect           | Description |
 |------------------|-------------|
-| **Participants** | *User*; 150 FLIP-staked *Validators* run Substrate State-Chain; AMM *Liquidity Providers*  who fund pools on the state chain |
-| **Flow**    | User specifies a direct swap (e.g. BTC → ETH) and deposits the input asset into ChainFlip’s Vault address on the source chain → the validators (nodes) monitoring that Vault see the deposit (once it reaches finality on the source chain) and record this event and swap details on the State Chain (which acts as an order book and pricing engine) → within the State Chain’s AMM, the trade is matched – the protocol determines the output amount using its cross-chain AMM pools → the validators collectively TSS-sign a transaction from the destination chain’s Vault to the user’s address, paying out the desired asset on the destination chain |
-| **Security**     | All user funds sit in on-chain Vaults controlled by the validator network’s threshold keys. No single validator can move funds; a supermajority (e.g. 2/3) must cooperate to sign any outbound transfer.Validators are required to put up a large FLIP token bond, which can be slashed for misbehavior, making attacks economically unattractive. The system relies on its own consensus (Substrate/Tendermint) to coordinate swaps, and validators must run full nodes on every connected chain to independently verify deposits and block finality before signing outputs. |
-| **Extendability**| ChainFlip supports both EVM chains and non-EVM chains (Bitcoin, Solana, Polkadot, etc.) by implementing Vault “adapters” for each. To add a new chain, validators need to run a node for that chain and a vault address is generated for it. |
-
-### [Stargate](#stargate)
-
-A LayerZero-based bridge that taps unified liquidity pools and multi-attestation verifiers to deliver tokens
-
-![Stargate protocol overview](/img/interop/stargate.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | User; *LayerZero Relayer*; DVNs deliver source chain information; *Liquidity Providers* supply capital to Stargate’s pools which back the transfers on each chain |
-| **Flow**    | User calls `swap()` on the Stargate Router on the source chain, specifying a token and target chain → contract then locks or burns the user’s tokens into the local pool and emits a message to LZ → LayerZero’s Oracle (DVN) then delivers the source chain’s block header and transaction proof to the destination chain, while the Relayer submits the message payload and proof to the destination → the destination contract, upon seeing matching data from both the oracle and relayer, deducts the appropriate tokens from its local liquidity pool and credits the user with the native asset on that chain |
-| **Security**     | The cross-chain swap executes only if two independent parties (the oracle/DVN network and the relayer service) both attest to the same message. Neither alone can finalize a transfer. Thus, an attacker must compromise both the oracle(s) and relayer simultaneously to falsify a message. |
-| **Extendability**| Any chain that LayerZero supports (i.e. where a LayerZero Endpoint can be deployed) can host Stargate. Integrating a new chain means deploying the Stargate Router and Pool contracts on that chain and having an oracle feed (a light client) for that chain’s headers. Because liquidity is unified — Stargate pools on different chains are all connected — adding a chain shares liquidity with all others (no siloed pools per pair). New chains do not dilute security, because the same oracle/relayers are required to add that route. |
-
-Stargate has one of the deepest liqudities in the interop space. Works really neat and stable. They use 2 configured DVNs basically just 2 entity multisig, which I am not fun of and the technicall challange here is if they ramp up the security, lets say increase it to 4-8-12 DVNs the costs of the transaction would be skyrocketing and they will not be competetive in the market, considering that solutions like Layerswap and Relay, with a centralized (non-security) aproach are just attracting users - until something bad happens.
-
-### [Everclear](#everclear)
-
-A clearing layer that nets user intents and solver fills via Hyperlane, giving users instant payouts while balancing liquidity in a central hub.
-
-![Everclear protocol overview](/img/interop/everclear.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; open *Solvers* pre-deposit liquidity and compete to fill it; a single *Clearing Hub* (Everclear’s own chain) that nets and settles intents; off-chain *Relayers & Cartographer bots* batch the queues and relay messages over Hyperlan. |
-| **Flow**    | The user generates a new Intent and submits it to the Spoke contract on the source chain, which locks the user’s funds and queues the intent → this intent is relayed to the Hub  → The Hub chain’s Everclear module continuously matches incoming intents with available solver liquidity on destination chains (netting multiple intents if possible) → A Solver with available balance on the destination chain is selected (either via an auction or first-come competition) and fills the intent by immediately paying the user on the destination from its pre-deposited liquidity (through the Spoke on destination) → A corresponding Fill message is sent back to the Hub. The Hub, upon seeing both the intent and fill, “nets” them – effectively crediting the solver’s account and marking the intent as settled  → Finally, a Settlement message is sent from the Hub to one of the Spoke contracts (whichever side needs to reconcile liquidity) to adjust the on-chain balances (e.g. transferring funds from the solver’s escrow to the user or vice versa). |
-| **Security**     | Solvers can only use funds they have prepaid into the Spoke contracts, and they receive payouts only through the Hub’s netting mechanism, so they cannot take user funds without delivering the service. Every settlement on the Hub requires matching intent and fill hashes, preventing mismatched or fraudulent fills. Cross-chain messages between Spokes and Hub are sent via Hyperlane (which itself has modular security), and if a message were tampered with or lost, the netting wouldn’t complete. Solvers are also typically required to stake a token (or be backed by stakers) and will be slashed if they fail to fulfill after claiming an intent, providing a financial guarantee. |
-| **Extendability**| To add a new chain: deploy a standard Spoke contract on that chain and set up Hyperlane message passing to the Hub. Everclear is built to be permissionless – any chain can be integrated as a Spoke without needing approval, and any party can become a solver or relayer by depositing funds and (if required) staking, so long as they abide by the protocol’s rules |
+| **Participants** | *User*; off-chain *Relayers* who fulfill user transfers immediately; *Guards* who watch for fraud during a dispute window; *LPs* who fund the pools used for fast swaps |
+| **Flow**    | The user initiates a transfer via the Synapse Router contract on the source chain →  Immediately, a Synapse Relayer on the destination chain executes a corresponding transaction, providing the user with the requested tokens almost instantly out of Synapse’s liquidity pool. In the background, the relayer then submits a prove transaction on the origin chain, attesting to what it did on the destination → this starts an optimistic challenge window  during which the action can be reviewed. Guard nodes (anyone can run a guard) monitor all cross-chain actions; if a guard detects that the relayer’s output was illegitimate (e.g., it claimed more tokens than were actually locked on source, or a different user’s funds), the guard can dispute the proof within the window. If the transfer goes undisputed until the window expires, it is considered valid. At that point, the relayer is allowed to claim the originally locked tokens (or equivalent) from the Synapse contract on the source chain as reimbursement. |
+| **Security**     | Synapse uses an optimistic security model: it assumes transfers are honest by default but relies on at least one honest guard to challenge any malicious or invalid cross-chain transaction. Relayers must put up collateral and they do not get paid until the dispute period passes, meaning they stand to lose money if they cheat.|
+| **Extendability**| Adding a new chain involves deploying the Synapse bridge contracts there and including that chain’s light-client verification in the proving mechanism. Since relayers and guards are permissionless roles, they can simply start supporting the new chain by running nodes and watching its events – no explicit approval needed. |
 
 ### [Meson](#meson)
 
@@ -282,6 +332,47 @@ Atomic-Swap HTLC network allowing LPs match stable-coin transfers between any ch
 | **Extendability**| Meson’s contracts are lightweight and independent on each chain. To add a new chain, one simply deploys the Meson escrow contract there. Because swaps are peer-to-peer between LPs and users, any new chain automatically can swap with all existing ones as long as some LP provides liquidity for that route. |
 
 I use this bridge really rarely, but I thought it's good to mention them as they use Atomic Swap workflow as well. Their approach with Trusted verifier is default in their dApp so basically you trust someone not to steal your funds (if they collide with LP they can steal) which I am not fun of and it completly demolishes the buity of Atomic Swaps. Again this is decision to stay competetive in the market, because as you could see with pure atomic swaps User's has to do 2 steps which noeone is fun of. As everythong things that the all problems with crypto is UX.
+
+### [1inch Fusion+](#1inch-fusion)
+
+Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
+
+![1inch Fusion+ protocol overview](/img/interop/1inch.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; competing *Resolvers* (KYC’d market-makers that pre-fund liquidity and stake 1INCH for “Unicorn Power”) race to fill it; a *Relayer/Auction* broadcasts orders and later reveals the secret; *on-chain Executor* that posts the final tx and receives a small tip. |
+| **Flow**    | The user submits a swap intent via the 1inch UI, specifying source asset, destination asset, amount, and a duration for the auction. This order is off-chain but signed by the user → It enters a Dutch auction off-chain, where Resolvers see it and over time the price offered to Resolvers becomes more favorable → when a Resolver decides to fill the order, here’s what happens: The Resolver calls the 1inch Fusion smart contracts on each chain: locking the user's tokens (which the resolver may pull via a signed permit or the user’s prior approval) into an HTLC on source, and locking their own tokens into a corresponding HTLC on destination. Both escrows use the same hashlock → Once both escrows are in place and the auction finality time has passed, the 1inch Relayer service reveals the secret (the preimage for the hashlock) publicly → with the secret now revealed, the Resolver can unlock the source-chain escrow, claiming the user’s original tokens (this is the resolver’s payment). Likewise, the user (or the executor on their behalf) uses the secret to unlock the destination escrow, releasing the output tokens to the user. |
+| **Security**     | Fusion+ operates via hashed timelock contracts on each chain, achieving true atomic swaps (either both legs complete or both revert). As such, neither the user nor resolver can cheat – the user only gets the output if the resolver gets the input and vice versa. Resolvers do require the user to sign a permit or give token approval on the source chain (so the resolver can move the user’s tokens into escrow when they fill the order), but this permit is used strictly within the atomic swap and cannot be abused outside the specific order. The staked 1INCH and KYC requirements for resolvers add an extra layer of security: resolvers have reputation and funds at stake, so malicious behavior would result in slashing of their Unicorn Power (and likely legal action since they are identified) |
+| **Extendability**| 1inch Fusion+ is readily extensible to new chains since it requires only the deployment of the standard Fusion escrow contracts on that chain. Once that’s done, any resolver that has or can obtain liquidity on that chain can start filling cross-chain orders involving that chain. |
+
+### [Garden Finance](garden-finance)
+
+Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
+
+![Garden protocol overview](/img/interop/garden.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | *User*; competitive *Solvers* (LPs that pre-deposit liquidity and stake SEED) picked by a decentralized order-book; optional *Relayers* just broadcast signed messages; *Stakers* back solvers and get slashed on failure. |
+| **Flow**    | The user submits a cross-chain swap intent through an interface or by signing a transaction, which is posted to a decentralized intent marketplace monitored by solvers. Solvers compete to fill the intent, and once one is selected, the user is instructed to deposit the source asset into an HTLC contract. Simultaneously, the solver locks the destination asset in a corresponding HTLC using the same hash. When both escrows are active, the user reveals the preimage to claim the destination asset, which also enables the solver to redeem the source asset. If either party fails to act in time, the timelocks ensure all funds are safely refunded, and the solver may be slashed for non-fulfillment, ensuring reliability and accountability. |
+| **Security**     | Garden Finance employs hashed timelock contracts just like classic atomic swaps, so the fundamental security is that no one can lose funds: either both transfers happen or both refund. On top of that, Garden introduces solver staking and slashing via the SEED token: if a solver fails or cheats (for instance, tries to cancel after seeing the price move), they can be financially punished, and their backers lose stake.  |
+| **Extendability**| To extend to a new chain, it needs the standard HTLC contracts deployed on that chain and for solvers to have liquidity there. Since it’s intent-based, every new chain instantly interoperates with all others because solvers can route between any two supported domains. |
+
+### [TRAIN](#train)
+
+A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless asset swaps between chains
+
+![TRAIN protocol overview](/img/interop/train.jpg)
+
+| Aspect           | Description |
+|------------------|-------------|
+| **Participants** | User; *Solvers* (liquidity providers) listed in the on-chain Discovery registry |
+| **Flow**    | The user initiates a cross-chain swap by submitting an intent to the TRAIN contract on the source chain, which locks their funds in a PreHTLC escrow. This intent is broadcast and picked up by solvers, who compete to fulfill it via an off-chain auction or algorithm. The selected solver locks equivalent funds on the destination chain. Once both escrows are active, the user transmits the hash of the destination lock to the source chain contract to confirm readiness. The solver then reveals the secret to release the escrowed funds on the destination chain, and claim their funds in the source chain. If either party fails to proceed, both sides can reclaim their funds after the timeout. |
+| **Security**     | TRAIN is built on pure atomic swap mechanics using HTLCs: either both parties fulfill the swap or both get refunded, eliminating unilateral risk. |
+| **Extendability**| Deploying TRAIN on a new chain automatically connects it to all other TRAIN-supported networks, because intents can be created on that chain and any solver can fulfill them by locking on another chain. There’s no centralized setup per chain – solvers self-register permissionlessly via the on-chain Discovery, and any chain’s contract simply uses the same standardized HTLC interface. This means the system scales completely permissionlessly: if a chain (EVM or non-EVM) supports hashlocks and timelocks, it can be added by deploying the standard contracts, and solvers will start servicing it as soon as there’s demand |
+
+I am the co-founder of this protocol. Take this with a bunch of salt.
 
 ### [Centralized Bridges](#centralized-bridges)
 
@@ -304,28 +395,12 @@ Circle’s burn-and-mint bridge that lets native USDC move across chains by burn
 
 ![Centralized bridges overview](/img/interop/cctp.jpg)
 
-
 | Aspect           | Description |
 |------------------|-------------|
 | **Participants** | *User*; Off-chain Circle *Attestation Service* (Iris); any *Relayer* for transmiting signatures |
 | **Flow**    | User calls depositForBurn() on the source-chain TokenMessenger, burning native USDC and emitting a message ID → Iris detects the burn once the block meets the chosen finality threshold (hard-finality for Standard transfers, soft-finality for Fast transfers in CCTP V2) and returns a signed attestation. → Any relayer submits the attestation to the destination chain’s MessageTransmitter via receiveMessageWithAttestation(), which verifies the signatures and mints the same amount of native USDC to the recipient.|
 | **Security**     | No on-chain security guarantees beyond the service’s honesty and solvency – this is effectively a custodial transfer. |
 | **Extendability**| (i) Adding a new chain requires (i) Circle issuing native USDC there, (ii) deploying the two contracts, and (iii) Iris starting to watch that chain—so expansion is fast but centrally coordinated by Circle. |
-
-### [TRAIN](#train)
-
-A permissionless cross-chain swaps protocol that uses atomic PreHTLC escrows and competitive solver auctions to enable trustless asset swaps between chains
-
-![TRAIN protocol overview](/img/interop/train.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | User; *Solvers* (liquidity providers) listed in the on-chain Discovery registry |
-| **Flow**    | The user initiates a cross-chain swap by submitting an intent to the TRAIN contract on the source chain, which locks their funds in a PreHTLC escrow. This intent is broadcast and picked up by solvers, who compete to fulfill it via an off-chain auction or algorithm. The selected solver locks equivalent funds on the destination chain. Once both escrows are active, the user transmits the hash of the destination lock to the source chain contract to confirm readiness. The solver then reveals the secret to release the escrowed funds on the destination chain, and claim their funds in the source chain. If either party fails to proceed, both sides can reclaim their funds after the timeout. |
-| **Security**     | TRAIN is built on pure atomic swap mechanics using HTLCs: either both parties fulfill the swap or both get refunded, eliminating unilateral risk. |
-| **Extendability**| Deploying TRAIN on a new chain automatically connects it to all other TRAIN-supported networks, because intents can be created on that chain and any solver can fulfill them by locking on another chain. There’s no centralized setup per chain – solvers self-register permissionlessly via the on-chain Discovery, and any chain’s contract simply uses the same standardized HTLC interface. This means the system scales completely permissionlessly: if a chain (EVM or non-EVM) supports hashlocks and timelocks, it can be added by deploying the standard contracts, and solvers will start servicing it as soon as there’s demand |
-
-I am the co-founder of this protocol. Take this with a bunch of salt.
 
 ### [LayerZero](#layerzero)
 
@@ -352,86 +427,6 @@ Modular messaging layer that uses configurable decentralized verifier networks p
 | **Flow**    | A user’s contract calls `dispatch(message, destChain)` on the local Mailbox contract, which logs the message  →  an off-chain Relayer picks up the message and the accompanying proof (Merkle path) and submits a transaction to the Mailbox on the destination chain calling `deliver(message, proof)` →  the destination Mailbox then invokes the application’s chosen ISM module to verify the proof and the origin of the message → if the ISM’s verification passes (i.e., the message is proven authentic according to the app’s security rules), the Mailbox contract calls the specified handler function on the destination contract, delivering the message payload.|
 | **Security**     | Hyperlane offers configurable security per message. Each ISM can enforce a different trust model. If a message passes the ISM, it means it met the exact criteria the app set (no weaker assumption). If a validator tries to approve a fraudulent message, their stake can be slashed (when using the default or any stake-based ISM). If using an external light client ISM, a bad proof is simply invalid. One honest party (in a multi-ISM config) can veto a bad message by not signing or by detecting a bad proof.|
 | **Extendability**| Hyperlane is permissionless by design: anyone can deploy the Mailbox contract to a new chain and connect it to the Hyperlane framework. There’s no requirement for a global validator set to support a chain – if a chain isn’t supported by the default ISM validators, a project could deploy their own ISM (even a simple multisig of their own validators or a custom light client) on that chain. Relayers are also permissionless; any relayer can carry messages (they are trust-minimal as they don’t verify, just pass along data) |
-
-### [Synapse](synapse)
-
-Optimistic bridge where collateral-posted relayers fulfill transfers immediately and guards can dispute within a challenge window.
-
-![Synapse protocol overview](/img/interop/synapse.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; off-chain *Relayers* who fulfill user transfers immediately; *Guards* who watch for fraud during a dispute window; *LPs* who fund the pools used for fast swaps |
-| **Flow**    | The user initiates a transfer via the Synapse Router contract on the source chain →  Immediately, a Synapse Relayer on the destination chain executes a corresponding transaction, providing the user with the requested tokens almost instantly out of Synapse’s liquidity pool. In the background, the relayer then submits a prove transaction on the origin chain, attesting to what it did on the destination → this starts an optimistic challenge window  during which the action can be reviewed. Guard nodes (anyone can run a guard) monitor all cross-chain actions; if a guard detects that the relayer’s output was illegitimate (e.g., it claimed more tokens than were actually locked on source, or a different user’s funds), the guard can dispute the proof within the window. If the transfer goes undisputed until the window expires, it is considered valid. At that point, the relayer is allowed to claim the originally locked tokens (or equivalent) from the Synapse contract on the source chain as reimbursement. |
-| **Security**     | Synapse uses an optimistic security model: it assumes transfers are honest by default but relies on at least one honest guard to challenge any malicious or invalid cross-chain transaction. Relayers must put up collateral and they do not get paid until the dispute period passes, meaning they stand to lose money if they cheat.|
-| **Extendability**| Adding a new chain involves deploying the Synapse bridge contracts there and including that chain’s light-client verification in the proving mechanism. Since relayers and guards are permissionless roles, they can simply start supporting the new chain by running nodes and watching its events – no explicit approval needed. |
-
-### [THORChain](#thorchain)
-
-Bonded node network with TSS Asgard vaults and a RUNE-paired AMM that swaps native L1 assets directly.
-
-![THOR protocol overview](/img/interop/thor.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; ~100 *Validator Nodes* running a Cosmos-SDK chain; they collectively control Asgard TSS vaults; external *Liquidity Providers* fund RUNE-paired pools. |
-| **Flow**    | The user sends a native asset to THORChain’s vault address with a memo indicating the desired swap → THORChain nodes (called THORNodes) monitoring that address see the incoming deposit once it reaches sufficient confirmations → When a supermajority of nodes observes the deposit, they assign it to a swap transaction in THORChain’s internal ledger and determine the output via THORChain’s AMM pricing (all swaps go through RUNE pools, so BTC -> ETH swap is executed as BTC->RUNE->ETH using pool prices) → the network then prepares an outbound transaction: the nodes collectively generate a signature (using a GG20 threshold scheme) to spend from the relevant outbound vault (e.g. the Asgard vault on Ethereum) to the user’s target address. |
-| **Security**     | THORChain’s security relies on a large bonded validator set and threshold cryptography. The vaults (called Asgard vaults) are controlled by a 2/3 threshold signature – for instance, if there are 100 nodes, any 67 can sign to move funds. No single node has the private key; it’s collectively generated and stored in pieces by the nodes. |
-| **Extendability**| New L1 chains can be added via governance. To integrate a chain, THORChain requires implementing a Bifrost client module for that chain’s API and having all validator nodes run a full node for it. |
-
-### [CCIP](#ccip)
-
-Chainlink’s cross-chain protocol that moves tokens and messages via dual oracle networks and an independent risk-management guard.
-
-![THOR protocol overview](/img/interop/ccip.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; staked *Committing DON* (Chainlink oracle nodes that sign every cross-chain message), independent *Risk-Management DON* that re-verifies each commit; any *Executor* submits the attested payload and pays gas on the destination chain. |
-| **Flow**    | The user calls `ccipSend` on the Router contract of the source chain, providing either tokens or an arbitrary payload for messaging → The Committing DON (Decentralized Oracle Network) monitoring that Router sees the event → Once finality is assured on the source chain, the DON reaches consensus on the message details and writes a cryptographic attestation to a special contract on the destination chain called the “Commit store”. Simultaneously, the Risk Management DON is monitoring all transfers → if the transfer exceeds certain preset limits (volume, rate, destination, etc.), the Risk DON can trigger a hold or “circuit break” on the transfer before it completes → once the required number of oracle signatures from the Committing DON are posted on the destination an Executor (which could be one of the DON’s nodes or any user) calls `ccipReceive` on the destination Router. |
-| **Security**     | CCIP employs what Chainlink calls “Level-5” security, the highest level of cross-chain security classification. This means multiple independent safeguards: (1) The primary DON (Committing DON) is decentralized and economically secured by staking – compromising it requires bribing or hacking a large fraction of nodes which hold significant LINK stakes (similar to Chainlink price feeds which have proven robust). The Risk Management DON runs on a separate codebase and separate infrastructure, ensuring that even if the primary DON was subverted, the risk DON could catch anomalous activity (kind of like a checks-and-balances system). This Risk DON can automatically halt transfers that look suspicious (amounts beyond set thresholds, etc.), providing an emergency brake. |
-| **Extendability**| Any chain that can host the Router contracts can integrate; Chainlink nodes just add a light-client module, so new L1s/L2s join without changes to existing networks. The v1.5 CCT (Cross-Chain Token) standard and Token Manager let issuers plug tokens into CCIP with minimal code, while dApps choose their own Executors/DON sets. |
-
-### [1inch Fusion+](#1inch-fusion)
-
-Dutch-auction HTLC swaps filled by staked resolvers who atomically lock and release funds on both chains.
-
-![1inch Fusion+ protocol overview](/img/interop/1inch.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; competing *Resolvers* (KYC’d market-makers that pre-fund liquidity and stake 1INCH for “Unicorn Power”) race to fill it; a *Relayer/Auction* broadcasts orders and later reveals the secret; *on-chain Executor* that posts the final tx and receives a small tip. |
-| **Flow**    | The user submits a swap intent via the 1inch UI, specifying source asset, destination asset, amount, and a duration for the auction. This order is off-chain but signed by the user → It enters a Dutch auction off-chain, where Resolvers see it and over time the price offered to Resolvers becomes more favorable → when a Resolver decides to fill the order, here’s what happens: The Resolver calls the 1inch Fusion smart contracts on each chain: locking the user's tokens (which the resolver may pull via a signed permit or the user’s prior approval) into an HTLC on source, and locking their own tokens into a corresponding HTLC on destination. Both escrows use the same hashlock → Once both escrows are in place and the auction finality time has passed, the 1inch Relayer service reveals the secret (the preimage for the hashlock) publicly → with the secret now revealed, the Resolver can unlock the source-chain escrow, claiming the user’s original tokens (this is the resolver’s payment). Likewise, the user (or the executor on their behalf) uses the secret to unlock the destination escrow, releasing the output tokens to the user. |
-| **Security**     | Fusion+ operates via hashed timelock contracts on each chain, achieving true atomic swaps (either both legs complete or both revert). As such, neither the user nor resolver can cheat – the user only gets the output if the resolver gets the input and vice versa. Resolvers do require the user to sign a permit or give token approval on the source chain (so the resolver can move the user’s tokens into escrow when they fill the order), but this permit is used strictly within the atomic swap and cannot be abused outside the specific order. The staked 1INCH and KYC requirements for resolvers add an extra layer of security: resolvers have reputation and funds at stake, so malicious behavior would result in slashing of their Unicorn Power (and likely legal action since they are identified) |
-| **Extendability**| 1inch Fusion+ is readily extensible to new chains since it requires only the deployment of the standard Fusion escrow contracts on that chain. Once that’s done, any resolver that has or can obtain liquidity on that chain can start filling cross-chain orders involving that chain. |
-
-### [Hyperbridge](#hyperbridge)
-
-Light client proof-aggregating Polkadot parachain that lets permissionless relayers deliver consensus-verified messages between any connected chain.
-
-![Hyperbridge protocol overview](/img/interop/hyperbridge.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; the *Hyperbridge* parachain (running in Polkadot) which serves as an aggregation and verification hub; permissionless Relayers (called Tesseract relayers) who fetch proofs from the parachain and submit them to destination chains. |
-| **Flow**    | The user’s contract calls the ISMP send function (e.g. dispatch) on the Dispatcher contract on the source chain, providing the payload and destination chain ID. This Dispatcher creates a commitment of the message and sends it to the Polkadot Hyperbridge parachain (this step is trustless because the parachain itself continuously reads these commitments via light clients). Concretely, each connected chain has a light client module running inside Hyperbridge that can verify that the Dispatcher emitted a given event. The Hyperbridge parachain collects all such events from all chains and includes them in its own block as an aggregated state root. Now for delivery: a relayer (Tesseract) picks up the fact that “Chain A has message X for Chain B” by querying the Hyperbridge parachain’s state. The relayer then constructs a proof that the message was included in Hyperbridge’s latest block (essentially a Merkle proof to the aggregated root, combined with proofs that the root includes the origin chain’s state). The relayer submits this proof to the ISMP Host contract on the destination chain. The Host contract knows how to verify proofs coming from Hyperbridge (it has a light client for the Polkadot Relay Chain/Hyperbridge parachain). It checks that the proof is valid and that the message was indeed committed by the source chain’s dispatcher.  If everything checks out, the Host contract then calls the target function on the destination chain (previously registered) to deliver the message (e.g. unlock tokens or call a cross-chain function). This entire flow involves no privileged relayer – if one relayer doesn’t deliver, another can – and no intermediary tokens (it can be used for both messages and token movements via proofs). |
-| **Security**     | Hyperbridge relies on cryptographic verification of consensus rather than multisigs. The Hyperbridge parachain, running under Polkadot’s shared security, is responsible for verifying the state and consensus of each connected external chain (via light-client modules for Tendermint, Ethereum, Bitcoin, etc.). This means when it includes a message from Chain A, that message has been proven to the Polkadot validators as a valid event from a finalized block of Chain A. Similarly, when the destination chain’s Host contract gets a proof, it verifies the Polkadot parachain’s consensus (using Polkadot’s GRANDPA or Beefy consensus proofs) and the state inclusion. So trust is placed in Polkadot’s validators (highly decentralized and economically secure) and the correctness of the light client implementations – not in a few bridge nodes. |
-| **Extendability**| Hyperbridge is chain-agnostic by design – to connect a new chain, one needs to implement a light client for that chain’s consensus and state proofs in the ISMP framework and deploy a Host/Dispatcher on that chain. Because Polkadot parachains have limited throughput, Hyperbridge’s design is optimized to aggregate and scale: it doesn’t require every node to track every chain, just the parachain to run clients and produce succinct proofs. Relayers are fully permissionless; anyone can run a “Tesseract” relayer and there’s an incentive model (they get fees for delivered messages, potentially enforced by the protocol) |
-
-This bridge design has an interesting caveat. Contrary to different validator-based bridging, validators/relayers of this network do not need to run a full node / light client for any supported chain. Those runners are separate permissionless parties. Validators just have to create a light client contract and wait for relayers to fill in the data. This is a nice improvement in terms of scalability, but it comes with a trade-off.
-
-### [Garden Finance](garden-finance)
-
-Intent-based HTLC network where staked solvers compete to fill swaps and face slashing if they fail to execute correctly.
-
-![Garden protocol overview](/img/interop/garden.jpg)
-
-| Aspect           | Description |
-|------------------|-------------|
-| **Participants** | *User*; competitive *Solvers* (LPs that pre-deposit liquidity and stake SEED) picked by a decentralized order-book; optional *Relayers* just broadcast signed messages; *Stakers* back solvers and get slashed on failure. |
-| **Flow**    | The user submits a cross-chain swap intent through an interface or by signing a transaction, which is posted to a decentralized intent marketplace monitored by solvers. Solvers compete to fill the intent, and once one is selected, the user is instructed to deposit the source asset into an HTLC contract. Simultaneously, the solver locks the destination asset in a corresponding HTLC using the same hash. When both escrows are active, the user reveals the preimage to claim the destination asset, which also enables the solver to redeem the source asset. If either party fails to act in time, the timelocks ensure all funds are safely refunded, and the solver may be slashed for non-fulfillment, ensuring reliability and accountability. |
-| **Security**     | Garden Finance employs hashed timelock contracts just like classic atomic swaps, so the fundamental security is that no one can lose funds: either both transfers happen or both refund. On top of that, Garden introduces solver staking and slashing via the SEED token: if a solver fails or cheats (for instance, tries to cancel after seeing the price move), they can be financially punished, and their backers lose stake.  |
-| **Extendability**| To extend to a new chain, it needs the standard HTLC contracts deployed on that chain and for solvers to have liquidity there. Since it’s intent-based, every new chain instantly interoperates with all others because solvers can route between any two supported domains. |
 
 --
 
